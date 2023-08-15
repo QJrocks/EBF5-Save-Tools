@@ -4,38 +4,26 @@
 	<title>EBF5 Save File Tools</title>
 	
 	<script>
-		var fileString = ""
+		var inputFileName
+		var fileString
+		var fileObj
 	
+		//reads in the file and base64-decodes it into a usable string.
 		function readFile(input) {
 			let file = input.files[0]; 
 			let fileReader = new FileReader(); 
 			fileReader.readAsText(file); 
 			fileReader.onload = function() {
+				inputFileName = file.name
 				fileString = atob(fileReader.result)
+				fileObj = JSON.parse(fileString)
+				document.getElementById("result").innerText = ""
 				calculateRandEquips()
-				document.getElementById("result").innerText = getSeed()
 			}; 
 			fileReader.onerror = function() {
 				alert(fileReader.error);
 			}; 
-		}
-		
-		function getSeed() {
-			let startPos = fileString.search("seed"); 
-			if(startPos === -1) {
-				alert("Could not locate seed in save file!");
-				return -1;
-			}
-			startPos += 6; //skip past ' seed:" ' chars
-			let endPos = fileString.indexOf(',', startPos) - startPos;
-			if(endPos === -1) {
-				alert("Could not locate seed in save file!");
-				return -1;
-			}
-			let stringSeed = fileString.substr(startPos, endPos)
-			console.log(stringSeed)
-			return parseInt(stringSeed)
-		}
+		}		
 		
 		class LocalizationSet {
 			english = []
@@ -77,7 +65,7 @@
 				randSelect = (randSelect += seed + 1) % set.size;
 				seed = Math.floor(seed / 1.1);
 				if (set.equipSelected[randSelect] === false) {
-					console.log(set.localize.english[randSelect]);
+					document.getElementById("result").innerText += (set.localize.english[randSelect]);
 					set.equipSelected[randSelect] = true;
 				}
 			} while (set.equipsAvailable() === true);
@@ -96,12 +84,12 @@
 			var flairLocalization = new LocalizationSet();
 
 			//Order of equipment is from internal game files, not the in-game order
-			swordLocalization.english.push( "Heaven's Gate", "Berzerker", "Inferno", "Ice Needle", "Lightning Shard", "Sapphire Saint", "Black Fang", "The Chopper", "Giant Slayer", "Hyper Dri", "Emerald Smasher", "Devil's Fork", "Ultra Pro 9000X", "Club of Withering", "Crimson Razorback", "Dragon's Feather", "Golden Axe", "Dark Stalker", "Fusion Blade", "Soul Eater", "Love Blade");
+			swordLocalization.english.push( "Heaven's Gate", "Berzerker", "Inferno", "Ice Needle", "Lightning Shard", "Sapphire Saint", "Black Fang", "The Chopper", "Giant Slayer", "Hyper Drill", "Emerald Smasher", "Devil's Fork", "Ultra Pro 9000X", "Club of Withering", "Crimson Razorback", "Dragon's Feather", "Golden Axe", "Dark Stalker", "Fusion Blade", "Soul Eater", "Love Blade");
 			//Fun fact: The internal array for every staff in the game is called "STALVES".
 			staffLocalization.english.push( "Sol Spear", "Arctic Trident", "Wrath of Zeus", "Druid Staff", "Nimbus Rod", "Dragon Wings", "Gigavolt", "Alchemy Set", "Kaladanda", "Wrecking Rod", "Elder's Wisdom", "Obsidian Staff", "Celtic Cross", "Dark Tooth", "The Knife", "Paper Fan", "Oak Staff", "Beholding Eye", "Soul Crusher", "Shooting Star", "Slime Staff");
-			gunLocalization.english.push( "Nitro Bomber X", "Hellfire Shotgun", "Thunder Core", "Deep Blue", "Chainsaw Gun", "Vortex Cannon", "Sub Zero", "Shadow Blaster", "Biohazard Blaster", "Crystal Wing", "Heavy Claw", "Soul Pisto", "Super Snipe ZX", "Coconut Shooter", "Flame Titan", "Heartstopper", "Gungnir", "Spine Snapper", "Desert Scorpion", "Accelerator", "Green Goliath" );
-			bowLocalization.english.push("Fairy Bow", "Cold Stee", "Thor's Hammer", "Aquamarine", "Gaia's Gift", "Crimson Dragon", "Iron Tusk", "Fenrir's Jaw", "The Deceased", "Juggernaught", "Emerald Cyclone", "Eagle Eye", "The Stinger", "Chieftain's Horns", "Regal Turtle", "Alchemist's Bow", "Black Widow", "Angel Wing", "Sharanga", "Earth's Whisper", "Heaven's Voice");
-			toyLocalization.english.push( "Steel Buckler", "Bandit Blade", "Neon Lightbulb", "Honjo Masamune", "Riot Shield", "Leaf Shield", "Star Hammer", "Dog Sausage", "Icecream Sandwich", "Godly Book", "Human Skul", "Blood Bank", "Viking Buckler", "Turtle Shel", "Elven Shield", "Pixel Popper", "Book of Spells", "Power Paw", "Devil's Sunrise", "King's Guard", "Buster Sword");
+			gunLocalization.english.push( "Nitro Bomber X", "Hellfire Shotgun", "Thunder Core", "Deep Blue", "Chainsaw Gun", "Vortex Cannon", "Sub Zero", "Shadow Blaster", "Biohazard Blaster", "Crystal Wing", "Heavy Claw", "Soul Pistol", "Super Snipe ZX", "Coconut Shooter", "Flame Titan", "Heartstopper", "Gungnir", "Spine Snapper", "Desert Scorpion", "Accelerator", "Green Goliath" );
+			bowLocalization.english.push("Fairy Bow", "Cold Steel", "Thor's Hammer", "Aquamarine", "Gaia's Gift", "Crimson Dragon", "Iron Tusk", "Fenrir's Jaw", "The Deceased", "Juggernaught", "Emerald Cyclone", "Eagle Eye", "The Stinger", "Chieftain's Horns", "Regal Turtle", "Alchemist's Bow", "Black Widow", "Angel Wing", "Sharanga", "Earth's Whisper", "Heaven's Voice");
+			toyLocalization.english.push( "Steel Buckler", "Bandit Blade", "Neon Lightbulb", "Honjo Masamune", "Riot Shield", "Leaf Shield", "Star Hammer", "Dog Sausage", "Icecream Sandwich", "Godly Book", "Human Skull", "Blood Bank", "Viking Buckler", "Turtle Shell", "Elven Shield", "Pixel Popper", "Book of Spells", "Power Paw", "Devil's Sunrise", "King's Guard", "Buster Sword");
 			mHatLocalization.english.push( "Captain's Hat", "Knight's Helmet", "Horned Helmet", "Spartan Helmet", "Genji Helmet", "Basket Hat", "Dragon Helmet", "Army Helmet", "Officer's Hat", "Space Helmet", "Scottish Cap", "Spelunking Hat", "Wizard Hat", "Headband", "Necromancer's Helmet", "Cardboard Box", "Gas Mask", "Death Mask", "Puppy Hat", "Pumpkin Head", "Santa Hat");
 			mArmorLocalization.english.push("Captain's Coat", "Heroic Armor", "Viking Fur", "Spartan Cuirass", "Genji Armor", "Ninja Gear", "Dragon Armor", "Camo Jacket", "Officer's Coat", "Space Ace", "Scottish Kilt", "Explorer's Jacket", "Wizard Robe", "Turtle Gi", "Flame Suit", "Hobo Clothes", "Hipster Shirt", "Shell Armor", "Priest's Tunic", "Coat of Teeth", "Santa Outfit");
 			//Fun fact: All of the "Bobble" hats are internally spelled "Bauble"! Except for the Spider Bobble. That one is spelled with bobble.
@@ -109,7 +97,7 @@
 			//Fun fact: The Bubble Dress is internally called the "blue dress". It's not wrong?
 			fArmorLocalization.english.push("Red Dress", "Ranger Skirt", "Nurse Uniform", "Fur Dress", "Pope Dress", "Cactus Dress", "Cow Costume", "Maid Outfit", "Summer Kimono", "Dark Gown", "Magical Skirt", "Ninja Skirt", "Mecha Suit", "Obsidian Armor", "School Uniform", "Bubble Dress", "Camo Skirt", "Sami Dress", "Casual Skirt", "Spider Gown", "Santa Skirt");
 			//Fun fact: All the internal names for the earrings flairs are mispelled as "earings" in the game code!
-			flairLocalization.english.push("Flame Badge", "Lightning Badge", "Frost Badge", "Pearl Necklace", "Surgical Mask", "Angel Pin", "Bandage", "Iron Cross", "Silver Cross", "Golden Pendant", "Battle Paint", "Lucky Clover", "Hoop Earings", "The Tr*force", "Green Cross", "Fairy", "Pocket Watch", "Agnry Faic", "Target Badge", "Balance Badge", "Tentacle", "Peace Badge", "Crossbone Pin", "Chrome Earrings", "Amethyst Earrings", "Emerald Earrings", "Fat Fly", "Fake Mustache", "Big Eyebrows", "Small Cloud", "Cat Tai", "Mini Drone", "Sword Meda", "Shield Meda", "Gold Star", "Platinum Star", "Heart Pendant", "Lucky Fish", "Coin Charm", "Juicy Beast", "The One R*ng", "Baby Penguin", "RAM Chip", "Meow Meow Badge", "Nano Machines", "Pixel Glasses", "Companion C*be", "Dog Tags", "Tetromino", "Captain Viridian", "Dinosaur Egg", "Bitey Badge", "Narutomaki", "Pet Rock", "Tooth");
+			flairLocalization.english.push("Flame Badge", "Lightning Badge", "Frost Badge", "Pearl Necklace", "Surgical Mask", "Angel Pin", "Bandage", "Iron Cross", "Silver Cross", "Golden Pendant", "Battle Paint", "Lucky Clover", "Hoop Earings", "The Tr*force", "Green Cross", "Fairy", "Pocket Watch", "Agnry Faic", "Target Badge", "Balance Badge", "Tentacle", "Peace Badge", "Crossbone Pin", "Chrome Earrings", "Amethyst Earrings", "Emerald Earrings", "Fat Fly", "Fake Mustache", "Big Eyebrows", "Small Cloud", "Cat Tail", "Mini Drone", "Sword Medal", "Shield Medal", "Gold Star", "Platinum Star", "Heart Pendant", "Lucky Fish", "Coin Charm", "Juicy Beast", "The One R*ng", "Baby Penguin", "RAM Chip", "Meow Meow Badge", "Nano Machines", "Pixel Glasses", "Companion C*be", "Dog Tags", "Tetromino", "Captain Viridian", "Dinosaur Egg", "Bitey Badge", "Narutomaki", "Pet Rock", "Tooth");
 			
 			let swords = new EquipSet(21, 'wo', swordLocalization);
 			let staffs = new EquipSet(21, 'ta', staffLocalization);
@@ -122,17 +110,27 @@
 			let armorF = new EquipSet(21, 'rm', fArmorLocalization);
 			let flairs = new EquipSet(55, 'la', flairLocalization);
 			
-			let seed = getSeed()
-
+			let seed = fileObj.seed
+			
+			document.getElementById("result").innerText += "Sword Order: "
 			printOrder(seed, swords);
+			document.getElementById("result").innerText += "\n Staff Order: "
 			printOrder(seed, staffs);
+			document.getElementById("result").innerText += "\n Gun Order: "
 			printOrder(seed, guns);
+			document.getElementById("result").innerText += "\n Bow Order: "
 			printOrder(seed, bows);
+			document.getElementById("result").innerText += "\n Toy Order: "
 			printOrder(seed, toys);
+			document.getElementById("result").innerText += "\n Male Hat Order: "
 			printOrder(seed, hatsM);
+			document.getElementById("result").innerText += "\n Male Armor Order: "
 			printOrder(seed, armorM);
+			document.getElementById("result").innerText += "\n Female Hat Order: "
 			printOrder(seed, hatsF);
+			document.getElementById("result").innerText += "\n Female Armor Order: "
 			printOrder(seed, armorF);
+			document.getElementById("result").innerText += "\n Flair Order: "
 			printOrder(seed, flairs);
 		}
 	</script>

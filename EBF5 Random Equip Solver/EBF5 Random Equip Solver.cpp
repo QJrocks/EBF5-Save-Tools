@@ -93,6 +93,7 @@ int main() {
     EquipSet armorF = EquipSet(21, 'r', 'm', fArmorLocalization);
     EquipSet flairs = EquipSet(55, 'l', 'a', flairLocalization);
 
+    //Hardcoded seed from a sample file I used. The JS version reads in the seed from the file.
     printOrder(58973092, swords);
     printOrder(58973092, staffs);
     printOrder(58973092, guns);
