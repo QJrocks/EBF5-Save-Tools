@@ -30,6 +30,36 @@
 		function loadFile(prevLoaded) {
 			calculateRandEquips(prevLoaded)
 		}
+		
+		function saveFile() {
+			let filename = inputFileName;
+			let encoded = btoa(JSON.stringify(fileObj));
+			let text = ""
+			//Adobe's Base64 encoding default is slightly different from JavaScript's, in that every 76 characters a newline is added.
+			//See https://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/utils/Base64Encoder.html for more details.
+			//In any case, it's important to replicate that behavior here for maximum compatibility.
+			for(let x = 0; x < encoded.length; x += 76) {
+				text += encoded.substring(x, x + 76);
+				text += String.fromCharCode(10);
+			}
+			
+			if(text.charCodeAt(text.length - 1) == 10) {
+				text = text.substring(0, text.length - 1);
+			}
+			
+			var pom = document.createElement('a');
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+			pom.setAttribute('download', filename);
+
+			if (document.createEvent) {
+				var event = document.createEvent('MouseEvents');
+				event.initEvent('click', true, true);
+				pom.dispatchEvent(event);
+			}
+			else {
+				pom.click();
+			}
+		}
 
 		class EquipSet {
 			size = 0
@@ -43,7 +73,7 @@
 			constructor(size, nameString) {
 				this.size = size;
 				this.nameString = nameString
-				this.seedString = nameString.substr(1, 2)
+				this.seedString = nameString.substring(1, 3)
 
 				for (let x = 0; x < size; x++) {
 					this.equipSelected.push(false);
@@ -185,6 +215,7 @@ upload da file
 <br>
 <input id="input" onchange = "readFile(this)" type="file" />
 <br>
+<input value = "Save File" onclick = "saveFile()" type=button />
 <p id = "loadedButton" style = "display:none">fuck</p>
 <br>
 <p id = "result">wow</p>
