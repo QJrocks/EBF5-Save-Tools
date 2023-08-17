@@ -3,6 +3,8 @@
 <head>
 	<title>EBF5 Save File Tools</title>
 	
+	<script src = "localization.js"></script>
+	
 	<script>
 		var inputFileName
 		var fileString
@@ -18,33 +20,35 @@
 				fileString = atob(fileReader.result)
 				fileObj = JSON.parse(fileString)
 				document.getElementById("result").innerText = ""
-				calculateRandEquips()
+				loadFile(false);
 			}; 
 			fileReader.onerror = function() {
 				alert(fileReader.error);
 			}; 
-		}		
-		
-		class LocalizationSet {
-			english = []
-		};
+		}	
+
+		function loadFile(prevLoaded) {
+			calculateRandEquips(prevLoaded)
+		}
 
 		class EquipSet {
 			size = 0
-			//Internally, the game uses string matching for equipment (for example, the Flame Badge's internal ID is "firebadge") and localization. I'm using int IDs into array indices because it's easier for this program and also faster.
+			//Internally, the game uses string matching for equipment (for example, the Flame Badge's internal ID is "firebadge")
+			//I'm using a more generic string system just for ease of use (less copy-pasting from game files)
+			equipIDs = []
 			equipSelected = []
+			nameString = ""
 			seedString = ""
-			localize
 
-			constructor(size, seedString, locl) {
+			constructor(size, nameString) {
 				this.size = size;
-				this.seedString = seedString;
+				this.nameString = nameString
+				this.seedString = nameString.substr(1, 2)
 
 				for (let x = 0; x < size; x++) {
 					this.equipSelected.push(false);
+					this.equipIDs.push(nameString + x)
 				}
-
-				this.localize = locl;
 			}
 
 			equipsAvailable() {
@@ -55,83 +59,123 @@
 				}
 				return false;
 			}
+			
+			getNextEquip() {
+				let randSelect = 0;
+				let seed = fileObj.seed + this.seedString.charCodeAt(0) + this.seedString.charCodeAt(1);
+				do
+				{
+					randSelect = (randSelect += seed + 1) % this.size;
+					seed = Math.floor(seed / 1.1);
+					if (this.equipSelected[randSelect] === false) {
+						return this.equipIDs[randSelect]
+					}
+				} while (this.equipsAvailable() === true);
+				return "invalid";
+			}
+			
+			acquireEquip() {
+				let equipID = this.getNextEquip();
+				let equipIndex = this.equipIDs.indexOf(equipID)
+				this.equipSelected[equipIndex] = true;
+				return equipID
+			}
+			
+			swapEquips(prevEquip) {
+				let prevID = this.equipIDs.indexOf(prevEquip)
+				let newEquip = this.acquireEquip()
+				this.equipSelected[prevID] = false;
+				return newEquip
+			}
+			
+			markEquipped(currentEquip) {
+				let equipIndex = this.equipIDs.indexOf(currentEquip)
+				this.equipSelected[equipIndex] = true;
+			}
 		};
 
-		function printOrder(fileSeed, set) {
-			let randSelect = 0;
-			let seed = fileSeed + set.seedString.charCodeAt(0) + set.seedString.charCodeAt(1);
-			do
-			{
-				randSelect = (randSelect += seed + 1) % set.size;
-				seed = Math.floor(seed / 1.1);
-				if (set.equipSelected[randSelect] === false) {
-					document.getElementById("result").innerText += (set.localize.english[randSelect]);
-					set.equipSelected[randSelect] = true;
+		function printEquips(equipArray, resultElement) {
+			for(let x = 0; x < equipArray.length; x++) {
+				resultElement.innerText += localization["english"][equipArray[x]];
+				if(x != equipArray.length - 1) {
+					resultElement.innerText += ",\xa0"
 				}
-			} while (set.equipsAvailable() === true);
+			}
 		}
 
-		function calculateRandEquips() {
-			var swordLocalization = new LocalizationSet();
-			var staffLocalization = new LocalizationSet();
-			var gunLocalization = new LocalizationSet();
-			var bowLocalization = new LocalizationSet();
-			var toyLocalization = new LocalizationSet();
-			var mHatLocalization = new LocalizationSet();
-			var mArmorLocalization = new LocalizationSet();
-			var fHatLocalization = new LocalizationSet();
-			var fArmorLocalization = new LocalizationSet();
-			var flairLocalization = new LocalizationSet();
-
-			//Order of equipment is from internal game files, not the in-game order
-			swordLocalization.english.push( "Heaven's Gate", "Berzerker", "Inferno", "Ice Needle", "Lightning Shard", "Sapphire Saint", "Black Fang", "The Chopper", "Giant Slayer", "Hyper Drill", "Emerald Smasher", "Devil's Fork", "Ultra Pro 9000X", "Club of Withering", "Crimson Razorback", "Dragon's Feather", "Golden Axe", "Dark Stalker", "Fusion Blade", "Soul Eater", "Love Blade");
-			//Fun fact: The internal array for every staff in the game is called "STALVES".
-			staffLocalization.english.push( "Sol Spear", "Arctic Trident", "Wrath of Zeus", "Druid Staff", "Nimbus Rod", "Dragon Wings", "Gigavolt", "Alchemy Set", "Kaladanda", "Wrecking Rod", "Elder's Wisdom", "Obsidian Staff", "Celtic Cross", "Dark Tooth", "The Knife", "Paper Fan", "Oak Staff", "Beholding Eye", "Soul Crusher", "Shooting Star", "Slime Staff");
-			gunLocalization.english.push( "Nitro Bomber X", "Hellfire Shotgun", "Thunder Core", "Deep Blue", "Chainsaw Gun", "Vortex Cannon", "Sub Zero", "Shadow Blaster", "Biohazard Blaster", "Crystal Wing", "Heavy Claw", "Soul Pistol", "Super Snipe ZX", "Coconut Shooter", "Flame Titan", "Heartstopper", "Gungnir", "Spine Snapper", "Desert Scorpion", "Accelerator", "Green Goliath" );
-			bowLocalization.english.push("Fairy Bow", "Cold Steel", "Thor's Hammer", "Aquamarine", "Gaia's Gift", "Crimson Dragon", "Iron Tusk", "Fenrir's Jaw", "The Deceased", "Juggernaught", "Emerald Cyclone", "Eagle Eye", "The Stinger", "Chieftain's Horns", "Regal Turtle", "Alchemist's Bow", "Black Widow", "Angel Wing", "Sharanga", "Earth's Whisper", "Heaven's Voice");
-			toyLocalization.english.push( "Steel Buckler", "Bandit Blade", "Neon Lightbulb", "Honjo Masamune", "Riot Shield", "Leaf Shield", "Star Hammer", "Dog Sausage", "Icecream Sandwich", "Godly Book", "Human Skull", "Blood Bank", "Viking Buckler", "Turtle Shell", "Elven Shield", "Pixel Popper", "Book of Spells", "Power Paw", "Devil's Sunrise", "King's Guard", "Buster Sword");
-			mHatLocalization.english.push( "Captain's Hat", "Knight's Helmet", "Horned Helmet", "Spartan Helmet", "Genji Helmet", "Basket Hat", "Dragon Helmet", "Army Helmet", "Officer's Hat", "Space Helmet", "Scottish Cap", "Spelunking Hat", "Wizard Hat", "Headband", "Necromancer's Helmet", "Cardboard Box", "Gas Mask", "Death Mask", "Puppy Hat", "Pumpkin Head", "Santa Hat");
-			mArmorLocalization.english.push("Captain's Coat", "Heroic Armor", "Viking Fur", "Spartan Cuirass", "Genji Armor", "Ninja Gear", "Dragon Armor", "Camo Jacket", "Officer's Coat", "Space Ace", "Scottish Kilt", "Explorer's Jacket", "Wizard Robe", "Turtle Gi", "Flame Suit", "Hobo Clothes", "Hipster Shirt", "Shell Armor", "Priest's Tunic", "Coat of Teeth", "Santa Outfit");
-			//Fun fact: All of the "Bobble" hats are internally spelled "Bauble"! Except for the Spider Bobble. That one is spelled with bobble.
-			fHatLocalization.english.push("Red Ribbon", "Amber Bobble", "Nurse Hat", "Fur Hat", "Pope Hat", "Leafy Hairclip", "Curly Horns", "Cat Ears", "Flower Bobble", "Dark Bobble", "Slime Bunny", "Ninja Chopsticks", "Robot Ears", "Drill Bits", "Bunny Ears", "Ice Shards", "Royal Crown", "Rubber Duck", "Blue Elephant", "Spider Bobble", "Holly Hairpin");
-			//Fun fact: The Bubble Dress is internally called the "blue dress". It's not wrong?
-			fArmorLocalization.english.push("Red Dress", "Ranger Skirt", "Nurse Uniform", "Fur Dress", "Pope Dress", "Cactus Dress", "Cow Costume", "Maid Outfit", "Summer Kimono", "Dark Gown", "Magical Skirt", "Ninja Skirt", "Mecha Suit", "Obsidian Armor", "School Uniform", "Bubble Dress", "Camo Skirt", "Sami Dress", "Casual Skirt", "Spider Gown", "Santa Skirt");
-			//Fun fact: All the internal names for the earrings flairs are mispelled as "earings" in the game code!
-			flairLocalization.english.push("Flame Badge", "Lightning Badge", "Frost Badge", "Pearl Necklace", "Surgical Mask", "Angel Pin", "Bandage", "Iron Cross", "Silver Cross", "Golden Pendant", "Battle Paint", "Lucky Clover", "Hoop Earings", "The Tr*force", "Green Cross", "Fairy", "Pocket Watch", "Agnry Faic", "Target Badge", "Balance Badge", "Tentacle", "Peace Badge", "Crossbone Pin", "Chrome Earrings", "Amethyst Earrings", "Emerald Earrings", "Fat Fly", "Fake Mustache", "Big Eyebrows", "Small Cloud", "Cat Tail", "Mini Drone", "Sword Medal", "Shield Medal", "Gold Star", "Platinum Star", "Heart Pendant", "Lucky Fish", "Coin Charm", "Juicy Beast", "The One R*ng", "Baby Penguin", "RAM Chip", "Meow Meow Badge", "Nano Machines", "Pixel Glasses", "Companion C*be", "Dog Tags", "Tetromino", "Captain Viridian", "Dinosaur Egg", "Bitey Badge", "Narutomaki", "Pet Rock", "Tooth");
-			
-			let swords = new EquipSet(21, 'wo', swordLocalization);
-			let staffs = new EquipSet(21, 'ta', staffLocalization);
-			let guns = new EquipSet(21, 'un', gunLocalization);
-			let bows = new EquipSet(21, 'ow', bowLocalization);
-			let toys = new EquipSet(21, 'oy', toyLocalization);
-			let hatsM = new EquipSet(21, 'at', mHatLocalization);
-			let armorM = new EquipSet(21, 'rm', mArmorLocalization);
-			let hatsF = new EquipSet(21, 'at', fHatLocalization);
-			let armorF = new EquipSet(21, 'rm', fArmorLocalization);
-			let flairs = new EquipSet(55, 'la', flairLocalization);
+		function calculateRandEquips(prevLoaded) {
+			let swords = new EquipSet(21, 'sword');
+			let staffs = new EquipSet(21, 'staff');
+			let guns = new EquipSet(21, 'gun');
+			let bows = new EquipSet(21, 'bow');
+			let toys = new EquipSet(21, 'toy');
+			let hatsM = new EquipSet(21, 'hatm');
+			let armorM = new EquipSet(21, 'armorm');
+			let hatsF = new EquipSet(21, 'hatf');
+			let armorF = new EquipSet(21, 'armorf');
+			let flairs = new EquipSet(55, 'flair');
 			
 			let seed = fileObj.seed
 			
-			document.getElementById("result").innerText += "Sword Order: "
-			printOrder(seed, swords);
-			document.getElementById("result").innerText += "\n Staff Order: "
-			printOrder(seed, staffs);
-			document.getElementById("result").innerText += "\n Gun Order: "
-			printOrder(seed, guns);
-			document.getElementById("result").innerText += "\n Bow Order: "
-			printOrder(seed, bows);
-			document.getElementById("result").innerText += "\n Toy Order: "
-			printOrder(seed, toys);
-			document.getElementById("result").innerText += "\n Male Hat Order: "
-			printOrder(seed, hatsM);
-			document.getElementById("result").innerText += "\n Male Armor Order: "
-			printOrder(seed, armorM);
-			document.getElementById("result").innerText += "\n Female Hat Order: "
-			printOrder(seed, hatsF);
-			document.getElementById("result").innerText += "\n Female Armor Order: "
-			printOrder(seed, armorF);
-			document.getElementById("result").innerText += "\n Flair Order: "
-			printOrder(seed, flairs);
+			let resultElement = document.getElementById("result");
+
+			hatsM.markEquipped("hatm0");
+			hatsM.markEquipped("hatm1");
+			hatsM.markEquipped("hatm8");
+			
+			armorM.markEquipped("armorm15");
+			armorM.markEquipped("armorm1");
+			armorM.markEquipped("armorm8");
+			
+			hatsF.markEquipped("hatf0");
+			hatsF.markEquipped("hatf1");
+			
+			armorF.markEquipped("armorf0");
+			armorF.markEquipped("armorf1");
+			
+			let shopItems = new Array();
+			shopItems.push(hatsM.acquireEquip(), hatsF.acquireEquip(), armorM.acquireEquip(), armorF.acquireEquip(), flairs.acquireEquip(), swords.acquireEquip(), staffs.acquireEquip(), guns.acquireEquip(), bows.acquireEquip(), toys.acquireEquip(), hatsM.acquireEquip(), hatsF.acquireEquip(), hatsM.acquireEquip(), hatsF.acquireEquip(), flairs.acquireEquip(), swords.acquireEquip(), staffs.acquireEquip(), bows.acquireEquip(), toys.acquireEquip(), flairs.acquireEquip(), armorM.acquireEquip(), armorF.acquireEquip())
+			
+			resultElement.innerText += "\nShop items: "
+			printEquips(shopItems, resultElement)
+			
+			let mattEquips = new Array(swords.acquireEquip(), hatsM.swapEquips("hatm0"), armorM.swapEquips("armorm15"));			
+			let natzEquips = new Array(staffs.acquireEquip(), hatsF.swapEquips("hatf0"), armorF.swapEquips("armorf0"));
+			let lanceEquips = new Array(guns.acquireEquip(), hatsM.swapEquips("hatm8"), armorM.swapEquips("armorm8"));
+			let annaEquips = new Array(bows.acquireEquip(), hatsF.swapEquips("hatf1"), armorF.swapEquips("armorf1"));
+			let nolegsEquips = new Array(toys.acquireEquip(), hatsM.swapEquips("hatm1"), armorM.swapEquips("armorm1"));
+			
+			resultElement.innerText += "\nMatt equips: "
+			printEquips(mattEquips, resultElement);
+			resultElement.innerText += "\nNatz equips: "
+			printEquips(natzEquips, resultElement);
+			resultElement.innerText += "\nLance equips: "
+			printEquips(lanceEquips, resultElement);
+			resultElement.innerText += "\nAnna equips: "
+			printEquips(annaEquips, resultElement);
+			resultElement.innerText += "\nNoLegs equips: "
+			printEquips(nolegsEquips, resultElement);
+			
+			/*resultElement.innerText += "\nSword Order: "
+			printEquips(swordList, resultElement);
+			resultElement.innerText += "\n Staff Order: "
+			printEquips(staffList, resultElement);
+			resultElement.innerText += "\n Gun Order: "
+			printEquips(gunList, resultElement);
+			resultElement.innerText += "\n Bow Order: "
+			printEquips(bowList, resultElement);
+			resultElement.innerText += "\n Toy Order: "
+			printEquips(toyList, resultElement);
+			resultElement.innerText += "\n Male Hat Order: "
+			printEquips(hatsMList, resultElement);
+			resultElement.innerText += "\n Male Armor Order: "
+			printEquips(armorMList, resultElement);
+			resultElement.innerText += "\n Female Hat Order: "
+			printEquips(hatsFList, resultElement);
+			resultElement.innerText += "\n Female Armor Order: "
+			printEquips(armorFList, resultElement);
+			resultElement.innerText += "\n Flair Order: "
+			printEquips(flairList, resultElement);*/
 		}
 	</script>
 </head>
@@ -140,7 +184,9 @@
 upload da file
 <br>
 <input id="input" onchange = "readFile(this)" type="file" />
-<br><br>
+<br>
+<p id = "loadedButton" style = "display:none">fuck</p>
+<br>
 <p id = "result">wow</p>
 
 
