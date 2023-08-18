@@ -3,7 +3,43 @@
 <head>
 	<title>EBF5 Save File Tools</title>
 	
+	<style> 
+		html *
+		{
+		   font-size: 1em;
+		   color: #000;
+		   font-family: Verdana !important;
+		}
+		
+		.note
+		{
+			font-size: 0.8em;
+			color: #F00;
+		}
+		
+		.clickButton {
+		  background-color: #7F9CCB;
+		  padding: 5px 10px;
+		  border-radius: 5px;
+		  border: 1px ridge black;
+		  font-size: 0.8rem;
+		  height: auto;
+		}
+
+		.clickButton:hover {
+		  background-color: #2D5BA3;
+		  color: white;
+		}
+
+		.clickButton:active {
+		  background-color: #0D3F8F;
+		  color: white;
+		}
+		</style>
+	
 	<script src = "localization.js"></script>
+	
+	<script src = "defaultFile.js"></script>
 	
 	<script>
 		var inputFileName
@@ -18,24 +54,97 @@
 			fileReader.onload = function() {
 				inputFileName = file.name
 				fileString = atob(fileReader.result)
-				fileObj = JSON.parse(fileString)
-				document.getElementById("result").innerText = ""
 				loadFile(false);
 			}; 
 			fileReader.onerror = function() {
 				alert(fileReader.error);
 			}; 
 		}	
+		
+		function loadDefaultFile() {
+			inputFileName = "default.meow"
+			fileString = atob(defaultFileString)
+			loadFile(false);
+		}
 
 		function loadFile(prevLoaded) {
-			calculateRandEquips(prevLoaded)
+			document.getElementById("everything").style = "display:block"
+			document.getElementById("result").innerText = ""
+			fileObj = JSON.parse(fileString)
+			
+			document.getElementById("currentSP").value = fileObj.misc[0]
+			document.getElementById("maxSP").value = fileObj.misc[1]
+			document.getElementById("gold").value = fileObj.misc[2]
+			
+			document.getElementById("mattLVL").value = fileObj.playerData[0][0];
+			document.getElementById("natzLVL").value = fileObj.playerData[1][0];
+			document.getElementById("lanceLVL").value = fileObj.playerData[2][0];
+			document.getElementById("annaLVL").value = fileObj.playerData[3][0];
+			document.getElementById("nolegsLVL").value = fileObj.playerData[4][0];
+			
+			document.getElementById("mattEXP").value = fileObj.playerData[0][5];
+			document.getElementById("natzEXP").value = fileObj.playerData[1][5];
+			document.getElementById("lanceEXP").value = fileObj.playerData[2][5];
+			document.getElementById("annaEXP").value = fileObj.playerData[3][5];
+			document.getElementById("nolegsEXP").value = fileObj.playerData[4][5];
+			
+			document.getElementById("mattAP").value = fileObj.playerData[0][6];
+			document.getElementById("natzAP").value = fileObj.playerData[1][6];
+			document.getElementById("lanceAP").value = fileObj.playerData[2][6];
+			document.getElementById("annaAP").value = fileObj.playerData[3][6];
+			document.getElementById("nolegsAP").value = fileObj.playerData[4][6];
+			
+			document.getElementById("mattLimit").value = fileObj.playerData[0][2];
+			document.getElementById("natzLimit").value = fileObj.playerData[1][2];
+			document.getElementById("lanceLimit").value = fileObj.playerData[2][2];
+			document.getElementById("annaLimit").value = fileObj.playerData[3][2];
+			document.getElementById("nolegsLimit").value = fileObj.playerData[4][2];
+			
+			//Steroids are matched to multiple stats, but the stat multipliers are independent to each stat.
+			//To convert multipliers to steroid amounts, I opt to use the Attack/Magic Attack/Accuracy stats instead of the Defense/Magic Defense/Evade ones.
+			//They should be the same, so it shouldn't change anything, but it's good to note.
+			document.getElementById("mattADstr").value = (fileObj.playerData[0][1][1] - 100) / 2;
+			document.getElementById("mattMMstr").value = (fileObj.playerData[0][1][2] - 100) / 2;
+			document.getElementById("mattEAstr").value = (fileObj.playerData[0][1][3] - 100);
+			document.getElementById("mattHPstr").value = (fileObj.playerData[0][1][0] - 100) / 2;
+			
+			document.getElementById("natzADstr").value = (fileObj.playerData[1][1][1] - 100) / 2;
+			document.getElementById("natzMMstr").value = (fileObj.playerData[1][1][2] - 100) / 2;
+			document.getElementById("natzEAstr").value = (fileObj.playerData[1][1][3] - 100);
+			document.getElementById("natzHPstr").value = (fileObj.playerData[1][1][0] - 100) / 2;
+			
+			document.getElementById("lanceADstr").value = (fileObj.playerData[2][1][1] - 100) / 2;
+			document.getElementById("lanceMMstr").value = (fileObj.playerData[2][1][2] - 100) / 2;
+			document.getElementById("lanceEAstr").value = (fileObj.playerData[2][1][3] - 100);
+			document.getElementById("lanceHPstr").value = (fileObj.playerData[2][1][0] - 100) / 2;
+			
+			document.getElementById("annaADstr").value = (fileObj.playerData[3][1][1] - 100) / 2;
+			document.getElementById("annaMMstr").value = (fileObj.playerData[3][1][2] - 100) / 2;
+			document.getElementById("annaEAstr").value = (fileObj.playerData[3][1][3] - 100);
+			document.getElementById("annaHPstr").value = (fileObj.playerData[3][1][0] - 100) / 2;
+			
+			document.getElementById("nolegsADstr").value = (fileObj.playerData[4][1][1] - 100) / 2;
+			document.getElementById("nolegsMMstr").value = (fileObj.playerData[4][1][2] - 100) / 2;
+			document.getElementById("nolegsEAstr").value = (fileObj.playerData[4][1][3] - 100);
+			document.getElementById("nolegsHPstr").value = (fileObj.playerData[4][1][0] - 100) / 2;
+			
+			updatePlayerStats();
+			
+			if(fileObj["altEquipLocations"] === true) {
+				calculateRandEquips(prevLoaded)
+			}
 		}
 		
 		function saveFile() {
+			if(fileObj === undefined) {
+				window.alert("Load a file, first!");
+				return;
+			}
+		
 			let filename = inputFileName;
 			let encoded = btoa(JSON.stringify(fileObj));
 			let text = ""
-			//Adobe's Base64 encoding default is slightly different from JavaScript's, in that every 76 characters a newline is added.
+			//Adobe Flash's Base64 encoding default is slightly different from JavaScript's, in that every 76 characters a newline is added.
 			//See https://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/mx/utils/Base64Encoder.html for more details.
 			//In any case, it's important to replicate that behavior here for maximum compatibility.
 			for(let x = 0; x < encoded.length; x += 76) {
@@ -60,7 +169,11 @@
 				pom.click();
 			}
 		}
-
+		
+		function updatePlayerStats() {
+			
+		}
+		
 		class EquipSet {
 			size = 0
 			//Internally, the game uses string matching for equipment (for example, the Flame Badge's internal ID is "firebadge")
@@ -211,15 +324,126 @@
 </head>
 
 <body>
-upload da file
 <br>
-<input id="input" onchange = "readFile(this)" type="file" />
+<!-- First, buttons for loading / saving files -->
+<label for="loader" class="clickButton">Load Existing File From PC</label>
+<input id = "loader" onchange="readFile(this)" accept=".meow" type=file style="display:none" />
 <br>
-<input value = "Save File" onclick = "saveFile()" type=button />
-<p id = "loadedButton" style = "display:none">fuck</p>
+<input value = "Load Default File" class="clickButton" onclick = "loadDefaultFile()" type=button />
 <br>
-<p id = "result">wow</p>
-
+<input value = "Save File" class="clickButton" onclick = "saveFile()" type=button />
+<br>
+<br>
+<!-- The "everything" span is hidden until a file is loaded-->
+<span id = "everything" style="display:none">
+	<!-- All stat blocks have in-line script code to set the relevant variable in the fileObj object. This may not be the cleanest way to do it, but it keeps the code local to the input boxes that modify it. -->
+	<!-- The misc array stores current SP, max SP, gold, and summon power, in that order. -->
+	SP: <input type="text" id="currentSP" size="3" 
+	onchange="fileObj.misc[0] = this.value" 
+	/>
+	/
+	<!-- Since MaxSP as an editable value has very little use, display a note while it is selected -->
+	<input type="text" id="maxSP" size="3" 
+	onchange="fileObj.misc[1] = this.value" 
+	onfocus = "document.getElementById('SPnote').style = 'display:inline'" 
+	onblur = "document.getElementById('SPnote').style = 'display:none'"
+	/>
+	<span id = "SPnote" class="note" style = 'display:none'>!!! While this is editable, the game overwrites this values upon loading (and caps current SP), so it doesn't do much.</span>
+	<br>
+	Gold: <input type="text" id="gold" size="10" onchange="fileObj.misc[2] = this.value"  />
+	<br>
+	<p id = "result">wow</p>
+	
+	<!-- Giant stats table for the player-relevant save data.
+	Most of this is within the playerData table, which is stored in unlabelled array indices.
+	Therefore, I will label them here.
+	0 = Player level
+	1 = Steroid boost multiplier (Starts at 100)
+	2 = Limit charge, 0-100
+	3 = Array equipment IDs (numerical IDs)
+	4 = skill ids?
+	5 = Player EXP (Applied after player level)
+	6 = Player AP
+	7 = limit ids?
+	8 = If player is dead (true/false, unused in game)
+	-->
+	<table>
+	  <tr>
+		<th>Matt</th>
+		<th>Natz</th>
+		<th>Lance</th>
+		<th>Anna</th>
+		<th>NoLegs</th>
+	  </tr>
+	  <tr>
+		<!-- Levels -->
+		<td>Level: <input type="text" id="mattLVL" size="2" onchange="fileObj.playerData[0][0] = this.value; updatePlayerStats()"/> </td>
+		<td>Level: <input type="text" id="natzLVL" size="2" onchange="fileObj.playerData[1][0] = this.value; updatePlayerStats()"/> </td>
+		<td>Level: <input type="text" id="lanceLVL" size="2" onchange="fileObj.playerData[2][0] = this.value; updatePlayerStats()"/> </td>
+		<td>Level: <input type="text" id="annaLVL" size="2" onchange="fileObj.playerData[3][0] = this.value; updatePlayerStats()"/> </td>
+		<td>Level: <input type="text" id="nolegsLVL" size="2" onchange="fileObj.playerData[4][0] = this.value; updatePlayerStats()"/> </td>
+	  </tr>
+	  <tr>
+		<!-- EXP -->
+		<td>EXP: <input type="text" id="mattEXP" size="7" onchange="fileObj.playerData[0][5] = this.value"/> </td>
+		<td>EXP: <input type="text" id="natzEXP" size="7" onchange="fileObj.playerData[1][5] = this.value"/> </td>
+		<td>EXP: <input type="text" id="lanceEXP" size="7" onchange="fileObj.playerData[2][5] = this.value"/> </td>
+		<td>EXP: <input type="text" id="annaEXP" size="7" onchange="fileObj.playerData[3][5] = this.value"/> </td>
+		<td>EXP: <input type="text" id="nolegsEXP" size="7" onchange="fileObj.playerData[4][5] = this.value"/> </td>
+	  </tr>
+	  <tr>
+		<!-- AP -->
+		<td>AP: <input type="text" id="mattAP" size="6" onchange="fileObj.playerData[0][6] = this.value"/> </td>
+		<td>AP: <input type="text" id="natzAP" size="6" onchange="fileObj.playerData[1][6] = this.value"/> </td>
+		<td>AP: <input type="text" id="lanceAP" size="6" onchange="fileObj.playerData[2][6] = this.value"/> </td>
+		<td>AP: <input type="text" id="annaAP" size="6" onchange="fileObj.playerData[3][6] = this.value"/> </td>
+		<td>AP: <input type="text" id="nolegsAP" size="6" onchange="fileObj.playerData[4][6] = this.value"/> </td>
+	  </tr>
+	  <tr>
+		<!-- LIMIT -->
+		<td>Limit: <input type="range" min="0" max="100" id="mattLimit" size="5" onchange="fileObj.playerData[0][2] = this.value"/> </td>
+		<td>Limit: <input type="range" min="0" max="100" id="natzLimit" size="5" onchange="fileObj.playerData[1][2] = this.value"/> </td>
+		<td>Limit: <input type="range" min="0" max="100" id="lanceLimit" size="5" onchange="fileObj.playerData[2][2] = this.value"/> </td>
+		<td>Limit: <input type="range" min="0" max="100" id="annaLimit" size="5" onchange="fileObj.playerData[3][2] = this.value"/> </td>
+		<td>Limit: <input type="range" min="0" max="100" id="nolegsLimit" size="5" onchange="fileObj.playerData[4][2] = this.value"/> </td>
+	  </tr>
+	  <tr>
+		<!-- Nested table for amount of steroids used -->
+		<!-- Instead of storing the multipliers, they're converted to steroid amounts upon loading and converted back upon saving.
+		The ID acronyms stand for "Attack/Defense", "Magic Attack/Magic Defense", "Evade/Accuracy", and "HP" -->
+		<td><table>
+			<td>ADstr<input type="text" id="mattADstr" size="2" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>MMstr<input type="text" id="mattMMstr" size="2" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>EAstr<input type="text" id="mattEAstr" size="2" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></tr>
+			<td>HPstr<input type="text" id="mattHPstr" size="2" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/></tr>
+		</table></td>
+		<td><table>
+			<td>ADstr<input type="text" id="natzADstr" size="2" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>MMstr<input type="text" id="natzMMstr" size="2" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>EAstr<input type="text" id="natzEAstr" size="2" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></tr>
+			<td>HPstr<input type="text" id="natzHPstr" size="2" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/></tr>
+		</table></td>
+		<td><table>
+			<td>ADstr<input type="text" id="lanceADstr" size="2" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>MMstr<input type="text" id="lanceMMstr" size="2" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>EAstr<input type="text" id="lanceEAstr" size="2" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></tr>
+			<td>HPstr<input type="text" id="lanceHPstr" size="2" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/></tr>
+		</table></td>
+		<td><table>
+			<td>ADstr<input type="text" id="annaADstr" size="2" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>MMstr<input type="text" id="annaMMstr" size="2" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>EAstr<input type="text" id="annaEAstr" size="2" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></tr>
+			<td>HPstr<input type="text" id="annaHPstr" size="2" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/></tr>
+		</table></td>
+		<td><table>
+			<td>ADstr<input type="text" id="nolegsADstr" size="2" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>MMstr<input type="text" id="nolegsMMstr" size="2" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></tr>
+			<td>EAstr<input type="text" id="nolegsEAstr" size="2" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></tr>
+			<td>HPstr<input type="text" id="nolegsHPstr" size="2" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/></tr>
+		</table></td>
+	  </tr>
+	</table>
+</span>
 
 </body>
 </html>
