@@ -1,4 +1,4 @@
-let localization = {
+var localization = {
 	"english":
 		{
 			//Order of equipment is from internal game files, not necessarily the in-game order
@@ -259,6 +259,8 @@ let localization = {
 			"flair53": "Pet Rock",
 			"flair54": "Tooth",
 			
-			"invalid": "Invalid Equipment:"
+			"equipEmpty": "Nothing",
+			
+			"invalid": "Invalid Equipment"
 		}
 }
