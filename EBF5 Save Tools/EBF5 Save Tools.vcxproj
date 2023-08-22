@@ -24,6 +24,7 @@
     <ProjectGuid>{8cd7477c-1905-4e36-a712-b1c60327b7c3}</ProjectGuid>
     <RootNamespace>EBF5RandomEquipSolver</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>EBF5 Save Tools</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -139,8 +140,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EBF5 Random Equip Solver.cpp" />
     <ClCompile Include="equipClassGenerator.cpp" />
+    <ClCompile Include="randomEquipSolver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

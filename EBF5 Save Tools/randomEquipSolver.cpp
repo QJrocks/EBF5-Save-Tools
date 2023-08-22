@@ -1,5 +1,7 @@
-// EBF5 Random Equip Solver.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+// This is an old file initially used for solving the random equipment order for the "random equips" game mode.
+// It's a bit messy and doesn't account for a few quirks with the system (such as save-load cycling), but it's important to keep here just as a backup.
+// This logic has been entirely reimplemented in a cleaner way in the web page version.
+// Investigate this historical artifact at your own peril.
 
 #include <iostream>
 #include <vector>

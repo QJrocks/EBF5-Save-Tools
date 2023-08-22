@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EBF5 Random Equip Solver", "EBF5 Random Equip Solver\EBF5 Random Equip Solver.vcxproj", "{8CD7477C-1905-4E36-A712-B1C60327B7C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EBF5 Save Tools", "EBF5 Save Tools\EBF5 Save Tools.vcxproj", "{8CD7477C-1905-4E36-A712-B1C60327B7C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

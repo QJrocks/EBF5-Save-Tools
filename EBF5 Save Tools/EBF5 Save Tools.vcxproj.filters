@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EBF5 Random Equip Solver.cpp">
+    <ClCompile Include="equipClassGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="equipClassGenerator.cpp">
+    <ClCompile Include="randomEquipSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
