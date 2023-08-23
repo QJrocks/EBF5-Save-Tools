@@ -50,6 +50,10 @@
 			height: 80px;
 			width: 80px;
 		}
+		
+		.hide {
+			display: none;
+		}
 		</style>
 		
 	<link rel="stylesheet" href="equip_styles.css"/>
@@ -64,6 +68,76 @@
 		var inputFileName
 		var fileString
 		var fileObj
+		
+		var dropdownOpener;
+		var dropdownPlayer;
+		var dropdownEquipSlot;
+		function openEquipDropdown(parentElement, player, equipType) {
+			//An attempt to make calling this function a little less magic-number-y
+			const players = new Array("Matt", "Natz", "Lance", "Anna", "NoLegs");
+			const equipSlots = {
+				"sword": 0,
+				"staff": 0,
+				"gun": 0,
+				"bow": 0,
+				"toy": 0,
+				"armorm": 1,
+				"armorf":1,
+				"hatm": 2,
+				"hatf": 2,
+				"flair1": 3,
+				"flair2": 4,
+				"flair3": 5
+			}
+			dropdownOpener = parentElement;
+			dropdownPlayer = players.indexOf(player);
+			dropdownEquipSlot = equipSlots[equipType];
+			
+			let equipAmount = 21;
+			let equipsPerRow = 7;
+			if(equipType === "flair1" || equipType === "flair2" || equipType === "flair3") {
+				equipType = "flair"
+				equipAmount = 55;
+				equipsPerRow = 11;
+			}
+			let equipRows = equipAmount / equipsPerRow;
+			
+			let dropdownElement = document.getElementById("dropdownBackground");
+			dropdownElement.classList.remove("hide");
+			
+			//Now generate the table
+			let entireTableString = "<table style='position:relative; top: 20px; z-index: 100'>";
+			for(let x = 0; x < equipRows; x++) {
+				entireTableString += "<tr>";
+				for(let y = 0; y < equipsPerRow; y++) {
+					//Since this mess is littered with all sort of string-manipulating nonsense, here's what a standard output for these lines might look like:
+					//<span class="equip staff15" onclick="setEquipDropdown(this.className.split(&quot; &quot;)[1])"></span>
+					let equipID = equipType + (x * equipsPerRow + y);
+					let classString = "'" + "equip " + equipID + "'";
+					let hoverString = "'" + localization["english"][equipID] + "'";
+					let onclickString = "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'";
+					entireTableString += "<td><span class=" + classString + " onclick=" + onclickString + " title=" + hoverString + "></td>";
+				}
+				entireTableString +=  "</tr>";
+			}
+			entireTableString +=  "</table>";
+			
+			dropdownElement.innerHTML = entireTableString;
+		}
+		
+		function setEquipDropdown(val) {
+			dropdownOpener.className = "equip " + val;
+			fileObj.playerData[dropdownPlayer][3][dropdownEquipSlot] = allEquips.indexOf(val);
+		}
+		
+		function closeEquipDropdown() {
+			document.getElementById("dropdownBackground").classList.add('hide');
+			document.getElementById("dropdownBackground").innerHTML = "";
+			var dropdowns = document.getElementsByClassName("equipDropdown");
+			for (let element of dropdowns) {
+				element.classList.add('hide');
+			}
+		}
 	
 		//reads in the file and base64-decodes it into a usable string.
 		function readFile(input) {
@@ -134,7 +208,8 @@
 				return;
 			}
 		
-			let filename = inputFileName;
+			//Append "_edited" at the end of the filename to help avoid file corruption (original file is intact)
+			let filename = inputFileName.split('.')[0] + "_edited.meow";
 			let encoded = btoa(JSON.stringify(fileObj));
 			let text = ""
 			//Adobe Flash's Base64 encoding default is slightly different from JavaScript's, in that every 76 characters a newline is added.
@@ -317,6 +392,17 @@
 </head>
 
 <body>
+<!-- Before any of the actual webpage content, here's the HTML for the equip dropdown for selecting equipment.
+It has a screen-wide div which closes the dropdown on clicking. Inside the div is where the equip table itself is generated from the openEquipDropdown method.
+It's all hidden by default, of course. -->
+ <div class = "hide" id = "dropdownBackground" style="position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;" onclick = "closeEquipDropdown()"></div>
+
 <br>
 <!-- First, buttons for loading / saving files -->
 <label for="loader" class="clickButton">Load Existing File From PC</label>
@@ -439,69 +525,70 @@
 		<!-- Nested 2x3 table for character equips -->
 		<td><table>
 			<tr>
-				<td><span id="mattWeapon"/></td>
-				<td><span id="mattHat" onchange="fileObj.playerData[0][3][2]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="mattArmor" onchange="fileObj.playerData[0][3][1]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
+				<td><span id="mattHat" onclick="openEquipDropdown(this, 'Matt', 'hatm');"/></td>
+				<td><span id="mattArmor" onclick="openEquipDropdown(this, 'Matt', 'armorm');"/></td>
 			</tr>
 			<tr>
-				<td><span id="mattFlair1" onchange="fileObj.playerData[0][3][3]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="mattFlair2" onchange="fileObj.playerData[0][3][4]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="mattFlair3" onchange="fileObj.playerData[0][3][5]=allEquips.indexOf(this.value);"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="natzWeapon"/></td>
-				<td><span id="natzHat" onchange="fileObj.playerData[1][3][2]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="natzArmor" onchange="fileObj.playerData[1][3][1]=allEquips.indexOf(this.value);"/></td>
-			</tr>
-			<tr>
-				<td><span id="natzFlair1" onchange="fileObj.playerData[1][3][3]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="natzFlair2" onchange="fileObj.playerData[1][3][4]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="natzFlair3" onchange="fileObj.playerData[1][3][5]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="mattFlair1" onclick="openEquipDropdown(this, 'Matt', 'flair1');"/></td>
+				<td><span id="mattFlair2" onclick="openEquipDropdown(this, 'Matt', 'flair2');"/></td>
+				<td><span id="mattFlair3" onclick="openEquipDropdown(this, 'Matt', 'flair3');"/></td>
 			</tr>
 		</table></td>
 		<td><table>
 			<tr>
-				<td><span id="lanceWeapon"/></td>
-				<td><span id="lanceHat" onchange="fileObj.playerData[2][3][2]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="lanceArmor" onchange="fileObj.playerData[2][3][1]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="natzWeapon" onclick="openEquipDropdown(this, 'Natz', 'staff');"></span></td>
+				<td><span id="natzHat" onclick="openEquipDropdown(this, 'Natz', 'hatf');"/></td>
+				<td><span id="natzArmor" onclick="openEquipDropdown(this, 'Natz', 'armorf');"/></td>
 			</tr>
 			<tr>
-				<td><span id="lanceFlair1" onchange="fileObj.playerData[2][3][3]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="lanceFlair2" onchange="fileObj.playerData[2][3][4]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="lanceFlair3" onchange="fileObj.playerData[2][3][5]=allEquips.indexOf(this.value);"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="annaWeapon"/></td>
-				<td><span id="annaHat" onchange="fileObj.playerData[3][3][2]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="annaArmor" onchange="fileObj.playerData[3][3][1]=allEquips.indexOf(this.value);"/></td>
-			</tr>
-			<tr>
-				<td><span id="annaFlair1" onchange="fileObj.playerData[3][3][3]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="annaFlair2" onchange="fileObj.playerData[3][3][4]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="annaFlair3" onchange="fileObj.playerData[3][3][5]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="natzFlair1" onclick="openEquipDropdown(this, 'Natz', 'flair1');"/></td>
+				<td><span id="natzFlair2" onclick="openEquipDropdown(this, 'Natz', 'flair2');"/></td>
+				<td><span id="natzFlair3" onclick="openEquipDropdown(this, 'Natz', 'flair3');"/></td>
 			</tr>
 		</table></td>
 		<td><table>
 			<tr>
-				<td><span id="nolegsWeapon"/></td>
-				<td><span id="nolegsHat" onchange="fileObj.playerData[4][3][2]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="nolegsArmor" onchange="fileObj.playerData[4][3][1]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="lanceWeapon" onclick="openEquipDropdown(this, 'Lance', 'gun');"/></td>
+				<td><span id="lanceHat" onclick="openEquipDropdown(this, 'Lance', 'hatm');"/></td>
+				<td><span id="lanceArmor" onclick="openEquipDropdown(this, 'Lance', 'armorm');"/></td>
 			</tr>
 			<tr>
-				<td><span id="nolegsFlair1" onchange="fileObj.playerData[4][3][3]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="nolegsFlair2" onchange="fileObj.playerData[4][3][4]=allEquips.indexOf(this.value);"/></td>
-				<td><span id="nolegsFlair3" onchange="fileObj.playerData[4][3][5]=allEquips.indexOf(this.value);"/></td>
+				<td><span id="lanceFlair1" onclick="openEquipDropdown(this, 'Lance', 'flair1');"/></td>
+				<td><span id="lanceFlair2" onclick="openEquipDropdown(this, 'Lance', 'flair2');"/></td>
+				<td><span id="lanceFlair3" onclick="openEquipDropdown(this, 'Lance', 'flair3');"/></td>
+			</tr>
+		</table></td>
+		<td><table>
+			<tr>
+				<td><span id="annaWeapon" onclick="openEquipDropdown(this, 'Anna', 'bow');"/></td>
+				<td><span id="annaHat" onclick="openEquipDropdown(this, 'Anna', 'hatf');"/></td>
+				<td><span id="annaArmor" onclick="openEquipDropdown(this, 'Anna', 'armorf');"/></td>
+			</tr>
+			<tr>
+				<td><span id="annaFlair1" onclick="openEquipDropdown(this, 'Anna', 'flair1');"/></td>
+				<td><span id="annaFlair2" onclick="openEquipDropdown(this, 'Anna', 'flair2');"/></td>
+				<td><span id="annaFlair3" onclick="openEquipDropdown(this, 'Anna', 'flair3');"/></td>
+			</tr>
+		</table></td>
+		<td><table>
+			<tr>
+				<td><span id="nolegsWeapon" onclick="openEquipDropdown(this, 'NoLegs', 'toy');"/></td>
+				<td><span id="nolegsHat" onclick="openEquipDropdown(this, 'NoLegs', 'hatm');"/></td>
+				<td><span id="nolegsArmor" onclick="openEquipDropdown(this, 'NoLegs', 'armorm');"/></td>
+			</tr>
+			<tr>
+				<td><span id="nolegsFlair1" onclick="openEquipDropdown(this, 'NoLegs', 'flair1');"/></td>
+				<td><span id="nolegsFlair2" onclick="openEquipDropdown(this, 'NoLegs', 'flair2');"/></td>
+				<td><span id="nolegsFlair3" onclick="openEquipDropdown(this, 'NoLegs', 'flair3');"/></td>
 			</tr>
 		</table></td>
 	  </tr>
 	</table>
 </span>
-THIS IS CURRENTLY PRETTY INCOMPLETE<br>
-EQUIPMENT CHANGING AND UNLOCKING SOON (TM)<br>
+
+This is currently pretty incomplete!<br>
+Up next is plans for allowing any equipment into any slot, including from other characters (which yes, somehow works pretty flawlessly in game. Thanks, Matt!)<br>
 <br>
 This site was made possible through reverse engineering game files using FFDec. <br>
 Epic Battle Fantasy and all its graphics you see here (also taken from game files) are owned by Matt Roszak. <br>
