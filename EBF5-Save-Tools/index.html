@@ -114,7 +114,8 @@
 					//<span class="equip staff15" onclick="setEquipDropdown(this.className.split(&quot; &quot;)[1])"></span>
 					let equipID = equipType + (x * equipsPerRow + y);
 					let classString = "'" + "equip " + equipID + "'";
-					let hoverString = "'" + localization["english"][equipID] + "'";
+					//Since we're using single-quotes to wrap the string, we need to replace apostrophes in equipment names with &apos;
+					let hoverString = "'" + localization["english"][equipID].replace("'", "&apos;") + "'";
 					let onclickString = "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'";
 					entireTableString += "<td><span class=" + classString + " onclick=" + onclickString + " title=" + hoverString + "></td>";
 				}
@@ -187,12 +188,19 @@
 				document.getElementById(name+"EAstr").value = (fileObj.playerData[x][1][3] - 100);
 				document.getElementById(name+"HPstr").value = (fileObj.playerData[x][1][0] - 100) / 2;
 				
+				//Set up both classes for equip displays and titles for hovertext
 				document.getElementById(name+"Weapon").className = "equip " + allEquips[fileObj.playerData[x][3][0]];
+				document.getElementById(name+"Weapon").title = localization["english"][allEquips[fileObj.playerData[x][3][0]]];
 				document.getElementById(name+"Hat").className = "equip " + allEquips[fileObj.playerData[x][3][2]];
+				document.getElementById(name+"Hat").title = localization["english"][allEquips[fileObj.playerData[x][3][2]]];
 				document.getElementById(name+"Armor").className = "equip " + allEquips[fileObj.playerData[x][3][1]];
+				document.getElementById(name+"Armor").title = localization["english"][allEquips[fileObj.playerData[x][3][1]]];
 				document.getElementById(name+"Flair1").className = "equip " + allEquips[fileObj.playerData[x][3][3]];
+				document.getElementById(name+"Flair1").title = localization["english"][allEquips[fileObj.playerData[x][3][3]]];
 				document.getElementById(name+"Flair2").className = "equip " + allEquips[fileObj.playerData[x][3][4]];
+				document.getElementById(name+"Flair2").title = localization["english"][allEquips[fileObj.playerData[x][3][4]]];
 				document.getElementById(name+"Flair3").className = "equip " + allEquips[fileObj.playerData[x][3][5]];
+				document.getElementById(name+"Flair3").title = localization["english"][allEquips[fileObj.playerData[x][3][5]]];
 			}
 			
 			updatePlayerStats();
