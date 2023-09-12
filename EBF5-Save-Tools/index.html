@@ -54,6 +54,13 @@
 		.hide {
 			display: none;
 		}
+		
+		.darkened {
+			-webkit-filter:brightness(25%);
+			-moz-filter:brightness(25%);
+			filter: url(#brightness); /* required for FF */
+			filter:brightness(25%);
+		}
 		</style>
 		
 	<link rel="stylesheet" href="equip_styles.css"/>
@@ -72,9 +79,13 @@
 		var dropdownOpener;
 		var dropdownPlayer;
 		var dropdownEquipSlot;
+		
 		function openEquipDropdown(parentElement, player, equipType) {
 			//An attempt to make calling this function a little less magic-number-y
 			const players = new Array("Matt", "Natz", "Lance", "Anna", "NoLegs");
+			//Which equipment takes up which slot (for example, all weapons are in the top-left)
+			// 0 1 2
+			// 3 4 5
 			const equipSlots = {
 				"sword": 0,
 				"staff": 0,
@@ -89,21 +100,40 @@
 				"flair2": 4,
 				"flair3": 5
 			}
+			
 			dropdownOpener = parentElement;
-			dropdownPlayer = players.indexOf(player);
-			dropdownEquipSlot = equipSlots[equipType];
+			if(player !== null) { //bit of jank code here for changeDropdownTab, may refactor this into its own variable or something to make it cleaner
+				dropdownPlayer = players.indexOf(player);
+				dropdownEquipSlot = equipSlots[equipType];
+			}
+			
+			if(equipType === "flair1" || equipType === "flair2" || equipType === "flair3") {
+				equipType = "flair";
+			}
+			
+			//list of equipment tabs
+			const equipTabs = new Array("sword", "staff", "gun", "bow", "toy", "hatm", "armorm", "hatf", "armorf", "flair");
+			
+			//darken all tabs
+			let allTabs = document.getElementsByClassName("dropdownTab");
+			for(const tab of allTabs) {
+				tab.classList.add("darkened");
+			}
+			//un-darken selected tab
+			let selectedTabIndex = equipTabs.indexOf(equipType);
+			allTabs[selectedTabIndex].classList.remove("darkened");
+			
+			let dropdownContainer = document.getElementById("dropdownBackground");
+			let dropdownElement = document.getElementById("dropdownTable");
+			dropdownContainer.classList.remove("hide");
 			
 			let equipAmount = 21;
 			let equipsPerRow = 7;
-			if(equipType === "flair1" || equipType === "flair2" || equipType === "flair3") {
-				equipType = "flair"
+			if(equipType === "flair") {
 				equipAmount = 55;
 				equipsPerRow = 11;
 			}
 			let equipRows = equipAmount / equipsPerRow;
-			
-			let dropdownElement = document.getElementById("dropdownBackground");
-			dropdownElement.classList.remove("hide");
 			
 			//Now generate the table
 			let entireTableString = "<table style='position:relative; top: 20px; z-index: 100'>";
@@ -126,14 +156,25 @@
 			dropdownElement.innerHTML = entireTableString;
 		}
 		
+		var changeDropdownWarning = true;
+		function changeDropdownTab(event, val) { //takes in an additinoal event variable to prevent the dropdown from closing
+			event.stopPropagation();
+			openEquipDropdown(dropdownOpener, null, val);
+			if(changeDropdownWarning === true) {
+				window.alert("WARNING! While assigning equipment to the wrong slot generally works, certain combinations can result in the game or your save file being softlocked. Proceed with caution!")
+				changeDropdownWarning = false;
+			}
+		}
+		
 		function setEquipDropdown(val) {
 			dropdownOpener.className = "equip " + val;
+			dropdownOpener.title = localization["english"][val];
 			fileObj.playerData[dropdownPlayer][3][dropdownEquipSlot] = allEquips.indexOf(val);
 		}
 		
 		function closeEquipDropdown() {
 			document.getElementById("dropdownBackground").classList.add('hide');
-			document.getElementById("dropdownBackground").innerHTML = "";
+			document.getElementById("dropdownTable").innerHTML = "";
 			var dropdowns = document.getElementsByClassName("equipDropdown");
 			for (let element of dropdowns) {
 				element.classList.add('hide');
@@ -403,13 +444,29 @@
 <!-- Before any of the actual webpage content, here's the HTML for the equip dropdown for selecting equipment.
 It has a screen-wide div which closes the dropdown on clicking. Inside the div is where the equip table itself is generated from the openEquipDropdown method.
 It's all hidden by default, of course. -->
- <div class = "hide" id = "dropdownBackground" style="position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 50;" onclick = "closeEquipDropdown()"></div>
+	<div class = "hide" id = "dropdownBackground" style="position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 50;" onclick = "closeEquipDropdown()">
+		<!-- First, the row of tabs for switching between types -->
+		<table><tr>
+		<td><span class = "equip dropdownTab sword0" onclick = "changeDropdownTab(event, 'sword')"></span></td>
+		<td><span class = "equip dropdownTab staff13" onclick = "changeDropdownTab(event, 'staff')"></span></td>
+		<td><span class = "equip dropdownTab gun7" onclick = "changeDropdownTab(event, 'gun')"></span></td>
+		<td><span class = "equip dropdownTab bow0" onclick = "changeDropdownTab(event, 'bow')"></span></td>
+		<td><span class = "equip dropdownTab toy17" onclick = "changeDropdownTab(event, 'toy')"></span></td>
+		<td><span class = "equip dropdownTab hatm0" onclick = "changeDropdownTab(event, 'hatm')"></span></td>
+		<td><span class = "equip dropdownTab armorm15" onclick = "changeDropdownTab(event, 'armorm')"></span></td>
+		<td><span class = "equip dropdownTab hatf0" onclick = "changeDropdownTab(event, 'hatf')"></span></td>
+		<td><span class = "equip dropdownTab armorf0" onclick = "changeDropdownTab(event, 'armorf')"></span></td>
+		<td><span class = "equip dropdownTab flair11" onclick = "changeDropdownTab(event, 'flair')"></span></td>
+		</tr></table>
+		<!-- Equipment table is placed here! -->
+		<div id = "dropdownTable"> </div>
+	</div>
 
 <br>
 <!-- First, buttons for loading / saving files -->
@@ -439,7 +496,6 @@ It's all hidden by default, of course. -->
 	<br>
 	Gold: <input type="text" id="gold" size="10" onchange="fileObj.misc[2] = this.value"  />
 	<br>
-	<p id = "result">wow</p>
 	
 	<!-- Giant stats table for the player-relevant save data.
 	Most of this is within the playerData table, which is stored in unlabelled array indices.
@@ -593,10 +649,12 @@ It's all hidden by default, of course. -->
 		</table></td>
 	  </tr>
 	</table>
+	
+	<p id = "result">wow</p>
 </span>
 
 This is currently pretty incomplete!<br>
-Up next is plans for allowing any equipment into any slot, including from other characters (which yes, somehow works pretty flawlessly in game. Thanks, Matt!)<br>
+Up next is plans for inventory management - as for which (equip unlocking, equip levels, item addition/removal, steroid amounts) is yet to be decided. <br>
 <br>
 This site was made possible through reverse engineering game files using FFDec. <br>
 Epic Battle Fantasy and all its graphics you see here (also taken from game files) are owned by Matt Roszak. <br>
