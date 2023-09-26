@@ -13,10 +13,17 @@
 		}
 		
 		input[type=text] {
-			border: 0;
 			border-width: 2px;
 			border-style: solid;
 			border-color: #FFF;
+		}
+		
+		details {
+			padding: 5px;
+			border-width: 2px;
+			border-style: solid;
+			border-color: #37A;
+			border-radius: 5px;
 		}
 		
 		.note
@@ -127,6 +134,10 @@
 			let dropdownElement = document.getElementById("dropdownTable");
 			dropdownContainer.classList.remove("hide");
 			
+			dropdownElement.innerHTML = generateEquipTableHTML(equipType, "position:relative; top: 20px; z-index: 100", "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'");
+		}
+		
+		function generateEquipTableHTML(equipType, tableStyleString, onclickString) {
 			let equipAmount = 21;
 			let equipsPerRow = 7;
 			if(equipType === "flair") {
@@ -135,8 +146,7 @@
 			}
 			let equipRows = equipAmount / equipsPerRow;
 			
-			//Now generate the table
-			let entireTableString = "<table style='position:relative; top: 20px; z-index: 100'>";
+			let entireTableString = "<table style='" + tableStyleString + "'>";
 			for(let x = 0; x < equipRows; x++) {
 				entireTableString += "<tr>";
 				for(let y = 0; y < equipsPerRow; y++) {
@@ -146,14 +156,12 @@
 					let classString = "'" + "equip " + equipID + "'";
 					//Since we're using single-quotes to wrap the string, we need to replace apostrophes in equipment names with &apos;
 					let hoverString = "'" + localization["english"][equipID].replace("'", "&apos;") + "'";
-					let onclickString = "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'";
 					entireTableString += "<td><span class=" + classString + " onclick=" + onclickString + " title=" + hoverString + "></td>";
 				}
 				entireTableString +=  "</tr>";
 			}
 			entireTableString +=  "</table>";
-			
-			dropdownElement.innerHTML = entireTableString;
+			return entireTableString;
 		}
 		
 		var changeDropdownWarning = true;
@@ -246,6 +254,18 @@
 			
 			updatePlayerStats();
 			
+			//now set up the custom game flags since they're easy
+			document.getElementById("foeRemix").checked = fileObj["altFoes"];
+			document.getElementById("weatherRemix").checked = fileObj["altWeather"];
+			document.getElementById("equipRemix").checked = fileObj["altEquipStats"];
+			document.getElementById("randomEquips").checked = fileObj["altEquipLocations"];
+			document.getElementById("randomEquipsSeed").value = fileObj["seed"];
+			document.getElementById("scalingFoes").checked = fileObj["alwaysScaleFoes"];
+			document.getElementById("3Pbattles").checked = fileObj["threePlayerMode"];
+			document.getElementById("2Pbattles").checked = fileObj["twoPlayerMode"];
+			document.getElementById("1Pbattles").checked = fileObj["onePlayerMode"];
+			document.getElementById("limitLimitedPlayers").checked = false;
+			
 			if(fileObj["altEquipLocations"] === true) {
 				calculateRandEquips(prevLoaded)
 			}
@@ -284,6 +304,25 @@
 			}
 			else {
 				pom.click();
+			}
+		}
+		
+		function updateLimitedPlayerBattles() {
+			fileObj.threePlayerMode = document.getElementById('3Pbattles').checked;
+			fileObj.twoPlayerMode = document.getElementById('2Pbattles').checked;
+			fileObj.onePlayerMode = document.getElementById('1Pbattles').checked;
+		}
+		
+		function setLimitedPlayerInput(limited) {
+			if(limited) {
+				document.getElementById('3Pbattles').type = 'checkbox';
+				document.getElementById('2Pbattles').type = 'checkbox';
+				document.getElementById('1Pbattles').type = 'checkbox';
+			}
+			else {
+				document.getElementById('3Pbattles').type = 'radio';
+				document.getElementById('2Pbattles').type = 'radio';
+				document.getElementById('1Pbattles').type = 'radio';
 			}
 		}
 		
@@ -405,7 +444,7 @@
 			let annaEquips = new Array(bows.acquireEquip(), hatsF.swapEquips("hatf1"), armorF.swapEquips("armorf1"));
 			let nolegsEquips = new Array(toys.acquireEquip(), hatsM.swapEquips("hatm1"), armorM.swapEquips("armorm1"));
 			
-			resultElement.innerText += "\nMatt equips: "
+			/*resultElement.innerText += "\nMatt equips: "
 			printEquips(mattEquips, resultElement);
 			resultElement.innerText += "\nNatz equips: "
 			printEquips(natzEquips, resultElement);
@@ -416,7 +455,7 @@
 			resultElement.innerText += "\nNoLegs equips: "
 			printEquips(nolegsEquips, resultElement);
 			
-			/*resultElement.innerText += "\nSword Order: "
+			resultElement.innerText += "\nSword Order: "
 			printEquips(swordList, resultElement);
 			resultElement.innerText += "\n Staff Order: "
 			printEquips(staffList, resultElement);
@@ -480,21 +519,55 @@ It's all hidden by default, of course. -->
 <br>
 <!-- The "everything" span is hidden until a file is loaded-->
 <span id = "everything" style="display:none">
-	<!-- All stat blocks have in-line script code to set the relevant variable in the fileObj object. This may not be the cleanest way to do it, but it keeps the code local to the input boxes that modify it. -->
-	<!-- The misc array stores current SP, max SP, gold, and summon power, in that order. -->
-	SP: <input type="text" id="currentSP" size="3" 
-	onchange="fileObj.misc[0] = this.value" 
-	/>
-	/
-	<!-- Since MaxSP as an editable value has very little use, display a note while it is selected -->
-	<input type="text" id="maxSP" size="3" 
-	onchange="fileObj.misc[1] = this.value" 
-	onfocus = "document.getElementById('SPnote').style = 'display:inline'" 
-	onblur = "document.getElementById('SPnote').style = 'display:none'"
-	/>
-	<span id = "SPnote" class="note" style = 'display:none'>!!! While this is editable, the game overwrites this values upon loading (and caps current SP), so it doesn't do much.</span>
+	<!-- First block for general save file statistics -->
+	<details open>
+		<summary>General Stats</summary>
+		<!-- All stat blocks have in-line script code to set the relevant variable in the fileObj object. This may not be the cleanest way to do it, but it keeps the code local to the input boxes that modify it. -->
+		<!-- The misc array stores current SP, max SP, gold, and summon power, in that order. -->
+		SP: <input type="text" id="currentSP" size="3" 
+		onchange="fileObj.misc[0] = this.value" 
+		/>
+		/
+		<!-- Since MaxSP as an editable value has very little use, display a note while it is selected -->
+		<input type="text" id="maxSP" size="3" 
+		onchange="fileObj.misc[1] = this.value" 
+		onfocus = "document.getElementById('SPnote').style = 'display:inline'" 
+		onblur = "document.getElementById('SPnote').style = 'display:none'"
+		/>
+		<span id = "SPnote" class="note" style = 'display:none'>!!! While this is editable, the game overwrites this values upon loading (and caps current SP), so it doesn't do much.</span>
+		<br>
+		Gold: <input type="text" id="gold" size="10" onchange="fileObj.misc[2] = this.value"  />
+	</details>
 	<br>
-	Gold: <input type="text" id="gold" size="10" onchange="fileObj.misc[2] = this.value"  />
+	<details>
+		<summary>Custom Game</summary>
+		(icon) Foe Remix <input type="checkbox" id="foeRemix" onchange="fileObj.altFoes = this.checked"  /><br>
+		(icon) Weather Remix <input type="checkbox" id="weatherRemix" onchange="fileObj.altWeather = this.checked"  /><br>
+		(icon) Equip Remix <input type="checkbox" id="equipRemix" onchange=""  /><br>
+		(icon) Random Equips <input type="checkbox" id="randomEquips" onchange=""  /><br>
+		(indent this please) Random Equip Seed: <input type="text" id="randomEquipsSeed" size="10" onchange=""  /><br>
+		(icon) Scaling Foes <input type="checkbox" id="scalingFoes" onchange=""  /><br>
+		<br>
+		(icon) All-Player Battles <input type="radio" name="limitedPlayers" onchange="updateLimitedPlayerBattles()"  /> (default) <br>
+		(icon) 3-Player Battles <input type="radio" name="limitedPlayers" id="3Pbattles" onchange="updateLimitedPlayerBattles()"  /><br>
+		(icon) 2-Player Battles <input type="radio" name="limitedPlayers" id="2Pbattles" onchange="updateLimitedPlayerBattles()"  /><br>
+		(icon) 1-Player Battles <input type="radio" name="limitedPlayers" id="1Pbattles" onchange="updateLimitedPlayerBattles()"  /><br>
+		(indent) Allow individual toggles <input type="checkbox" id="limitLimitedPlayers" onchange="setLimitedPlayerInput(this.checked); updateLimitedPlayerBattles()"  /><br> <!-- This is more advanced than a 1-liner so it gets its own function -->
+		<span id = "PlayerBattles" class="note" style = 'display:none'>!!! If multiple player battle options are selected, the lowest-count takes priority.<br>
+		However, each option has certain multipliers for enemy stats and status chances, and these multipliers stack with each other.<br>
+		(For example, enemies would have ~21% health and ~40% single-target damage with all three on.</span>
+		<br>
+		
+		<details>
+			<summary>Equip Remix Obtain Order</summary>
+			Equip Remix works as such:
+			The game uses a "seed" value in the save file and generates a new random order in which said equipment is obtained.
+			Whenever you would obtain an equipment of a specific type, you'll get the next equipment you don't have from the list.
+			(If you haven't "recruited" Lance, some equips may be slightly out-of-order due to a programming quirk. To ensure a truly correct order, then save, quit, and reload the file.)
+			
+			<p id = "result">wow</p>
+		</details>
+	</details>
 	<br>
 	
 	<!-- Giant stats table for the player-relevant save data.
@@ -510,154 +583,238 @@ It's all hidden by default, of course. -->
 	7 = limit ids?
 	8 = If player is dead (true/false, unused in game)
 	-->
-	<table>
-	  <tr>
-		<th>Matt</th>
-		<th>Natz</th>
-		<th>Lance</th>
-		<th>Anna</th>
-		<th>NoLegs</th>
-	  </tr>
-	  <tr>
-		<!-- Levels -->
-		<td>Level: <input type="text" id="mattLVL" size="2" onchange="fileObj.playerData[0][0] = this.value; updatePlayerStats()"/> </td>
-		<td>Level: <input type="text" id="natzLVL" size="2" onchange="fileObj.playerData[1][0] = this.value; updatePlayerStats()"/> </td>
-		<td>Level: <input type="text" id="lanceLVL" size="2" onchange="fileObj.playerData[2][0] = this.value; updatePlayerStats()"/> </td>
-		<td>Level: <input type="text" id="annaLVL" size="2" onchange="fileObj.playerData[3][0] = this.value; updatePlayerStats()"/> </td>
-		<td>Level: <input type="text" id="nolegsLVL" size="2" onchange="fileObj.playerData[4][0] = this.value; updatePlayerStats()"/> </td>
-	  </tr>
-	  <tr>
-		<!-- EXP -->
-		<td>EXP: <input type="text" id="mattEXP" size="7" onchange="fileObj.playerData[0][5] = this.value"/> </td>
-		<td>EXP: <input type="text" id="natzEXP" size="7" onchange="fileObj.playerData[1][5] = this.value"/> </td>
-		<td>EXP: <input type="text" id="lanceEXP" size="7" onchange="fileObj.playerData[2][5] = this.value"/> </td>
-		<td>EXP: <input type="text" id="annaEXP" size="7" onchange="fileObj.playerData[3][5] = this.value"/> </td>
-		<td>EXP: <input type="text" id="nolegsEXP" size="7" onchange="fileObj.playerData[4][5] = this.value"/> </td>
-	  </tr>
-	  <tr>
-		<!-- AP -->
-		<td>AP: <input type="text" id="mattAP" size="6" onchange="fileObj.playerData[0][6] = this.value"/> </td>
-		<td>AP: <input type="text" id="natzAP" size="6" onchange="fileObj.playerData[1][6] = this.value"/> </td>
-		<td>AP: <input type="text" id="lanceAP" size="6" onchange="fileObj.playerData[2][6] = this.value"/> </td>
-		<td>AP: <input type="text" id="annaAP" size="6" onchange="fileObj.playerData[3][6] = this.value"/> </td>
-		<td>AP: <input type="text" id="nolegsAP" size="6" onchange="fileObj.playerData[4][6] = this.value"/> </td>
-	  </tr>
-	  <tr>
-		<!-- LIMIT -->
-		<td>Limit: <input type="range" min="0" max="100" id="mattLimit" size="5" onchange="fileObj.playerData[0][2] = this.value"/> </td>
-		<td>Limit: <input type="range" min="0" max="100" id="natzLimit" size="5" onchange="fileObj.playerData[1][2] = this.value"/> </td>
-		<td>Limit: <input type="range" min="0" max="100" id="lanceLimit" size="5" onchange="fileObj.playerData[2][2] = this.value"/> </td>
-		<td>Limit: <input type="range" min="0" max="100" id="annaLimit" size="5" onchange="fileObj.playerData[3][2] = this.value"/> </td>
-		<td>Limit: <input type="range" min="0" max="100" id="nolegsLimit" size="5" onchange="fileObj.playerData[4][2] = this.value"/> </td>
-	  </tr>
-	  <tr>
-		<!-- Nested table for amount of steroids used -->
-		<!-- Instead of storing the multipliers, they're converted to steroid amounts upon loading and converted back upon saving.
-		The ID acronyms stand for "Attack/Defense", "Magic Attack/Magic Defense", "Evade/Accuracy", and "HP" -->
-		<td><table>
-			<td>ADstr<input type="text" id="mattADstr" size="2" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>MMstr<input type="text" id="mattMMstr" size="2" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>EAstr<input type="text" id="mattEAstr" size="2" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-			<td>HPstr<input type="text" id="mattHPstr" size="2" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
-		</table></td>
-		<td><table>
-			<td>ADstr<input type="text" id="natzADstr" size="2" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>MMstr<input type="text" id="natzMMstr" size="2" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>EAstr<input type="text" id="natzEAstr" size="2" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-			<td>HPstr<input type="text" id="natzHPstr" size="2" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
-		</table></td>
-		<td><table>
-			<td>ADstr<input type="text" id="lanceADstr" size="2" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>MMstr<input type="text" id="lanceMMstr" size="2" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>EAstr<input type="text" id="lanceEAstr" size="2" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-			<td>HPstr<input type="text" id="lanceHPstr" size="2" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
-		</table></td>
-		<td><table>
-			<td>ADstr<input type="text" id="annaADstr" size="2" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>MMstr<input type="text" id="annaMMstr" size="2" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>EAstr<input type="text" id="annaEAstr" size="2" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-			<td>HPstr<input type="text" id="annaHPstr" size="2" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
-		</table></td>
-		<td><table>
-			<td>ADstr<input type="text" id="nolegsADstr" size="2" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>MMstr<input type="text" id="nolegsMMstr" size="2" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-			<td>EAstr<input type="text" id="nolegsEAstr" size="2" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-			<td>HPstr<input type="text" id="nolegsHPstr" size="2" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
-		</table></td>
-	  </tr>
-	  <tr>
-		<!-- Nested 2x3 table for character equips -->
-		<td><table>
-			<tr>
-				<td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
-				<td><span id="mattHat" onclick="openEquipDropdown(this, 'Matt', 'hatm');"/></td>
-				<td><span id="mattArmor" onclick="openEquipDropdown(this, 'Matt', 'armorm');"/></td>
-			</tr>
-			<tr>
-				<td><span id="mattFlair1" onclick="openEquipDropdown(this, 'Matt', 'flair1');"/></td>
-				<td><span id="mattFlair2" onclick="openEquipDropdown(this, 'Matt', 'flair2');"/></td>
-				<td><span id="mattFlair3" onclick="openEquipDropdown(this, 'Matt', 'flair3');"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="natzWeapon" onclick="openEquipDropdown(this, 'Natz', 'staff');"></span></td>
-				<td><span id="natzHat" onclick="openEquipDropdown(this, 'Natz', 'hatf');"/></td>
-				<td><span id="natzArmor" onclick="openEquipDropdown(this, 'Natz', 'armorf');"/></td>
-			</tr>
-			<tr>
-				<td><span id="natzFlair1" onclick="openEquipDropdown(this, 'Natz', 'flair1');"/></td>
-				<td><span id="natzFlair2" onclick="openEquipDropdown(this, 'Natz', 'flair2');"/></td>
-				<td><span id="natzFlair3" onclick="openEquipDropdown(this, 'Natz', 'flair3');"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="lanceWeapon" onclick="openEquipDropdown(this, 'Lance', 'gun');"/></td>
-				<td><span id="lanceHat" onclick="openEquipDropdown(this, 'Lance', 'hatm');"/></td>
-				<td><span id="lanceArmor" onclick="openEquipDropdown(this, 'Lance', 'armorm');"/></td>
-			</tr>
-			<tr>
-				<td><span id="lanceFlair1" onclick="openEquipDropdown(this, 'Lance', 'flair1');"/></td>
-				<td><span id="lanceFlair2" onclick="openEquipDropdown(this, 'Lance', 'flair2');"/></td>
-				<td><span id="lanceFlair3" onclick="openEquipDropdown(this, 'Lance', 'flair3');"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="annaWeapon" onclick="openEquipDropdown(this, 'Anna', 'bow');"/></td>
-				<td><span id="annaHat" onclick="openEquipDropdown(this, 'Anna', 'hatf');"/></td>
-				<td><span id="annaArmor" onclick="openEquipDropdown(this, 'Anna', 'armorf');"/></td>
-			</tr>
-			<tr>
-				<td><span id="annaFlair1" onclick="openEquipDropdown(this, 'Anna', 'flair1');"/></td>
-				<td><span id="annaFlair2" onclick="openEquipDropdown(this, 'Anna', 'flair2');"/></td>
-				<td><span id="annaFlair3" onclick="openEquipDropdown(this, 'Anna', 'flair3');"/></td>
-			</tr>
-		</table></td>
-		<td><table>
-			<tr>
-				<td><span id="nolegsWeapon" onclick="openEquipDropdown(this, 'NoLegs', 'toy');"/></td>
-				<td><span id="nolegsHat" onclick="openEquipDropdown(this, 'NoLegs', 'hatm');"/></td>
-				<td><span id="nolegsArmor" onclick="openEquipDropdown(this, 'NoLegs', 'armorm');"/></td>
-			</tr>
-			<tr>
-				<td><span id="nolegsFlair1" onclick="openEquipDropdown(this, 'NoLegs', 'flair1');"/></td>
-				<td><span id="nolegsFlair2" onclick="openEquipDropdown(this, 'NoLegs', 'flair2');"/></td>
-				<td><span id="nolegsFlair3" onclick="openEquipDropdown(this, 'NoLegs', 'flair3');"/></td>
-			</tr>
-		</table></td>
-	  </tr>
-	</table>
-	
-	<p id = "result">wow</p>
+	<details open>
+		<summary>Character Stats and Equips</summary>
+		<table>
+		  <tr>
+			<th>Matt</th>
+			<th>Natz</th>
+			<th>Lance</th>
+			<th>Anna</th>
+			<th>NoLegs</th>
+		  </tr>
+		  <tr>
+			<!-- Levels -->
+			<td>Level: <input type="text" id="mattLVL" size="2" onchange="fileObj.playerData[0][0] = this.value; updatePlayerStats()"/> </td>
+			<td>Level: <input type="text" id="natzLVL" size="2" onchange="fileObj.playerData[1][0] = this.value; updatePlayerStats()"/> </td>
+			<td>Level: <input type="text" id="lanceLVL" size="2" onchange="fileObj.playerData[2][0] = this.value; updatePlayerStats()"/> </td>
+			<td>Level: <input type="text" id="annaLVL" size="2" onchange="fileObj.playerData[3][0] = this.value; updatePlayerStats()"/> </td>
+			<td>Level: <input type="text" id="nolegsLVL" size="2" onchange="fileObj.playerData[4][0] = this.value; updatePlayerStats()"/> </td>
+		  </tr>
+		  <tr>
+			<!-- EXP -->
+			<td>EXP: <input type="text" id="mattEXP" size="7" onchange="fileObj.playerData[0][5] = this.value"/> </td>
+			<td>EXP: <input type="text" id="natzEXP" size="7" onchange="fileObj.playerData[1][5] = this.value"/> </td>
+			<td>EXP: <input type="text" id="lanceEXP" size="7" onchange="fileObj.playerData[2][5] = this.value"/> </td>
+			<td>EXP: <input type="text" id="annaEXP" size="7" onchange="fileObj.playerData[3][5] = this.value"/> </td>
+			<td>EXP: <input type="text" id="nolegsEXP" size="7" onchange="fileObj.playerData[4][5] = this.value"/> </td>
+		  </tr>
+		  <tr>
+			<!-- AP -->
+			<td>AP: <input type="text" id="mattAP" size="6" onchange="fileObj.playerData[0][6] = this.value"/> </td>
+			<td>AP: <input type="text" id="natzAP" size="6" onchange="fileObj.playerData[1][6] = this.value"/> </td>
+			<td>AP: <input type="text" id="lanceAP" size="6" onchange="fileObj.playerData[2][6] = this.value"/> </td>
+			<td>AP: <input type="text" id="annaAP" size="6" onchange="fileObj.playerData[3][6] = this.value"/> </td>
+			<td>AP: <input type="text" id="nolegsAP" size="6" onchange="fileObj.playerData[4][6] = this.value"/> </td>
+		  </tr>
+		  <tr>
+			<!-- LIMIT -->
+			<td>Limit: <input type="range" min="0" max="100" id="mattLimit" size="5" onchange="fileObj.playerData[0][2] = this.value"/> </td>
+			<td>Limit: <input type="range" min="0" max="100" id="natzLimit" size="5" onchange="fileObj.playerData[1][2] = this.value"/> </td>
+			<td>Limit: <input type="range" min="0" max="100" id="lanceLimit" size="5" onchange="fileObj.playerData[2][2] = this.value"/> </td>
+			<td>Limit: <input type="range" min="0" max="100" id="annaLimit" size="5" onchange="fileObj.playerData[3][2] = this.value"/> </td>
+			<td>Limit: <input type="range" min="0" max="100" id="nolegsLimit" size="5" onchange="fileObj.playerData[4][2] = this.value"/> </td>
+		  </tr>
+		  <tr>
+			<!-- Nested table for amount of steroids used -->
+			<!-- Instead of storing the multipliers, they're converted to steroid amounts upon loading and converted back upon saving.
+			The ID acronyms stand for "Attack/Defense", "Magic Attack/Magic Defense", "Evade/Accuracy", and "HP" -->
+			<td><table>
+				<td>ADstr<input type="text" id="mattADstr" size="2" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>MMstr<input type="text" id="mattMMstr" size="2" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>EAstr<input type="text" id="mattEAstr" size="2" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
+				<td>HPstr<input type="text" id="mattHPstr" size="2" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+			</table></td>
+			<td><table>
+				<td>ADstr<input type="text" id="natzADstr" size="2" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>MMstr<input type="text" id="natzMMstr" size="2" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>EAstr<input type="text" id="natzEAstr" size="2" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
+				<td>HPstr<input type="text" id="natzHPstr" size="2" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+			</table></td>
+			<td><table>
+				<td>ADstr<input type="text" id="lanceADstr" size="2" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>MMstr<input type="text" id="lanceMMstr" size="2" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>EAstr<input type="text" id="lanceEAstr" size="2" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
+				<td>HPstr<input type="text" id="lanceHPstr" size="2" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+			</table></td>
+			<td><table>
+				<td>ADstr<input type="text" id="annaADstr" size="2" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>MMstr<input type="text" id="annaMMstr" size="2" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>EAstr<input type="text" id="annaEAstr" size="2" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
+				<td>HPstr<input type="text" id="annaHPstr" size="2" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+			</table></td>
+			<td><table>
+				<td>ADstr<input type="text" id="nolegsADstr" size="2" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>MMstr<input type="text" id="nolegsMMstr" size="2" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td>EAstr<input type="text" id="nolegsEAstr" size="2" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
+				<td>HPstr<input type="text" id="nolegsHPstr" size="2" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+			</table></td>
+		  </tr>
+		  <tr>
+			<!-- Nested 2x3 table for character equips -->
+			<td><table>
+				<tr>
+					<td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
+					<td><span id="mattHat" onclick="openEquipDropdown(this, 'Matt', 'hatm');"/></td>
+					<td><span id="mattArmor" onclick="openEquipDropdown(this, 'Matt', 'armorm');"/></td>
+				</tr>
+				<tr>
+					<td><span id="mattFlair1" onclick="openEquipDropdown(this, 'Matt', 'flair1');"/></td>
+					<td><span id="mattFlair2" onclick="openEquipDropdown(this, 'Matt', 'flair2');"/></td>
+					<td><span id="mattFlair3" onclick="openEquipDropdown(this, 'Matt', 'flair3');"/></td>
+				</tr>
+			</table></td>
+			<td><table>
+				<tr>
+					<td><span id="natzWeapon" onclick="openEquipDropdown(this, 'Natz', 'staff');"></span></td>
+					<td><span id="natzHat" onclick="openEquipDropdown(this, 'Natz', 'hatf');"/></td>
+					<td><span id="natzArmor" onclick="openEquipDropdown(this, 'Natz', 'armorf');"/></td>
+				</tr>
+				<tr>
+					<td><span id="natzFlair1" onclick="openEquipDropdown(this, 'Natz', 'flair1');"/></td>
+					<td><span id="natzFlair2" onclick="openEquipDropdown(this, 'Natz', 'flair2');"/></td>
+					<td><span id="natzFlair3" onclick="openEquipDropdown(this, 'Natz', 'flair3');"/></td>
+				</tr>
+			</table></td>
+			<td><table>
+				<tr>
+					<td><span id="lanceWeapon" onclick="openEquipDropdown(this, 'Lance', 'gun');"/></td>
+					<td><span id="lanceHat" onclick="openEquipDropdown(this, 'Lance', 'hatm');"/></td>
+					<td><span id="lanceArmor" onclick="openEquipDropdown(this, 'Lance', 'armorm');"/></td>
+				</tr>
+				<tr>
+					<td><span id="lanceFlair1" onclick="openEquipDropdown(this, 'Lance', 'flair1');"/></td>
+					<td><span id="lanceFlair2" onclick="openEquipDropdown(this, 'Lance', 'flair2');"/></td>
+					<td><span id="lanceFlair3" onclick="openEquipDropdown(this, 'Lance', 'flair3');"/></td>
+				</tr>
+			</table></td>
+			<td><table>
+				<tr>
+					<td><span id="annaWeapon" onclick="openEquipDropdown(this, 'Anna', 'bow');"/></td>
+					<td><span id="annaHat" onclick="openEquipDropdown(this, 'Anna', 'hatf');"/></td>
+					<td><span id="annaArmor" onclick="openEquipDropdown(this, 'Anna', 'armorf');"/></td>
+				</tr>
+				<tr>
+					<td><span id="annaFlair1" onclick="openEquipDropdown(this, 'Anna', 'flair1');"/></td>
+					<td><span id="annaFlair2" onclick="openEquipDropdown(this, 'Anna', 'flair2');"/></td>
+					<td><span id="annaFlair3" onclick="openEquipDropdown(this, 'Anna', 'flair3');"/></td>
+				</tr>
+			</table></td>
+			<td><table>
+				<tr>
+					<td><span id="nolegsWeapon" onclick="openEquipDropdown(this, 'NoLegs', 'toy');"/></td>
+					<td><span id="nolegsHat" onclick="openEquipDropdown(this, 'NoLegs', 'hatm');"/></td>
+					<td><span id="nolegsArmor" onclick="openEquipDropdown(this, 'NoLegs', 'armorm');"/></td>
+				</tr>
+				<tr>
+					<td><span id="nolegsFlair1" onclick="openEquipDropdown(this, 'NoLegs', 'flair1');"/></td>
+					<td><span id="nolegsFlair2" onclick="openEquipDropdown(this, 'NoLegs', 'flair2');"/></td>
+					<td><span id="nolegsFlair3" onclick="openEquipDropdown(this, 'NoLegs', 'flair3');"/></td>
+				</tr>
+			</table></td>
+		  </tr>
+		</table>
+	</details>
+	<br>
+	<span style = "font-size:90px"> !!! --- EVERYTHING BELOW IS NOT IMPLEMENTED AND IS MAINLY THERE FOR ORGANIZATION PURPOSES --- !!! </span>
+	<details open>
+		<summary>Player Skills and Limits</summary>
+		Work in progress!
+	</details>
+	<br>
+	<details open>
+		<summary>Obtained Equipment and Levels</summary>
+		<input value = "Obtain/Remove equipment" class="clickButton" onclick = "//window.alert('me when the')" type=button />
+	</details>
+	<br>
+	<details open>
+		<summary>Consumable Items</summary>
+		food/crafting
+	</details>
+	<br>
+	<details open>
+		<summary>Steroids</summary>
+		amount held and costs
+	</details>
+	<br>
+	<details open>
+		<summary>Key Items</summary>
+		food/crafting
+	</details>
 </span>
 
 This is currently pretty incomplete!<br>
-Up next is plans for inventory management - as for which (equip unlocking, equip levels, item addition/removal, steroid amounts) is yet to be decided. <br>
+Up next is getting some more icons from the game - can't have placeholder text forever! <br>
 <br>
 This site was made possible through reverse engineering game files using FFDec. <br>
 Epic Battle Fantasy and all its graphics you see here (also taken from game files) are owned by Matt Roszak. <br>
 If you are Matt Roszak and you want this site obliterated harder than my coffee supply after Epic Godcat, email me at qdesmond@proton.me and it shall be done. <br>
+
+<!--
+Here's a list of all save file parameters and how many are implemented. I don't know how many I'll actually add support for, but it's a good fake-checklist of sorts.
+[D] - Done
+[P] - Partially done
+[N] - Up next
+[S] - Simple to implement
+[T] - Tricky to implement
+[U] - Unbelievably difficult to implement (these'll probably take a while)
+[?] - Unsure of what this entails, so can't tell how difficult it is
+
+misc - [P], missing summon power (Which doesn't really matter, since the game ignores the value and re-calculates it on load regardless)
+rareItemCosts - [S], stores # of rare items bought instead of costs
+eventData - [U]
+spellLevels - [T]
+spellOwnage - [T]
+area - [S]
+altWeather - [P], needs icon
+seed - [S]
+altEquipStats - [P], needs icon
+textFlags - [U]
+altEquipLocations - [P], needs icon
+altFoes - [P], needs icon
+alwaysScaleFoes - [P], needs icon
+cheats - [T], presumable also includes challenges
+consoles - [S]
+alwaysGiveEXP - [S]
+customizations - [?]
+books - [T], why are there 31 of these? there aren't *that* many at the library...
+threePlayerMode - [P], needs icon
+limitsList - [?], array that fills up to 20 with only true????
+battlesWithCounter - [S]
+twoPlayerMode - [P], needs icon
+markerData - [?], requires a good chunk of testing
+onePlayerMode - [P], needs icon
+playerData - [P], missing skills, limits, and dead/not dead (if it still even functions in the game)
+equippedSummons - [?], could be mildly tricky or hellish
+equipSets - [T], just lists of equip ids for the equipment presets
+blocks - [?], no idea what this even does
+battlesWithResistance - [S]
+ownedSummons - [T], mainly just involves figuring out summon ids 
+equipLevels - [T]
+mapData - [U], dear god those array sizes
+summonInfo - [T], summon name, nickname, unknown number variable (amount captured??)
+gameStats - [S], a bunch of unlabelled numbers but that's what ffdec is for
+party - [S]
+equipOwnage - [N]
+shipping - [?], only 6 numbers around the same range? what it mean?
+recentSummons - [?]
+medals - [S], uses true/null instead of true/false for some reason
+scans - [T], array of magic strings instead of foe ids like summons use
+npcFlags - [U]
+questNo - [S], new game/new game+, so on and so forth
+itemQuantities - [T]
+cardQuantities - [S], says "quantities" but cards are unique so they're all just 0 or 1
+-->
+
 </body>
 </html>
