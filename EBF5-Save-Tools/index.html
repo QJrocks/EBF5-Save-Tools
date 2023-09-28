@@ -543,10 +543,10 @@ It's all hidden by default, of course. -->
 		<summary>Custom Game</summary>
 		(icon) Foe Remix <input type="checkbox" id="foeRemix" onchange="fileObj.altFoes = this.checked"  /><br>
 		(icon) Weather Remix <input type="checkbox" id="weatherRemix" onchange="fileObj.altWeather = this.checked"  /><br>
-		(icon) Equip Remix <input type="checkbox" id="equipRemix" onchange=""  /><br>
-		(icon) Random Equips <input type="checkbox" id="randomEquips" onchange=""  /><br>
-		(indent this please) Random Equip Seed: <input type="text" id="randomEquipsSeed" size="10" onchange=""  /><br>
-		(icon) Scaling Foes <input type="checkbox" id="scalingFoes" onchange=""  /><br>
+		(icon) Equip Remix <input type="checkbox" id="equipRemix" onchange="fileObj.altEquipStats = this.checked"  /><br>
+		(icon) Random Equips <input type="checkbox" id="randomEquips" onchange="fileObj.altEquipLocations = this.checked"  /><br>
+		(indent this please) Random Equip Seed: <input type="text" id="randomEquipsSeed" size="10" onchange="fileObj.seed = Number(this.value)"  /><br>
+		(icon) Scaling Foes <input type="checkbox" id="scalingFoes" onchange="fileObj.alwaysScaleFoes = this.checked"  /><br>
 		<br>
 		(icon) All-Player Battles <input type="radio" name="limitedPlayers" onchange="updateLimitedPlayerBattles()"  /> (default) <br>
 		(icon) 3-Player Battles <input type="radio" name="limitedPlayers" id="3Pbattles" onchange="updateLimitedPlayerBattles()"  /><br>
