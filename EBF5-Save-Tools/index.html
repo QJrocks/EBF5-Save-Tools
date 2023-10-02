@@ -51,11 +51,22 @@
 		  color: white;
 		}
 		
+		.small {
+			--equip-size: 20px;
+		}
+		
+		.medium {
+			--equip-size: 40px;
+		}
+		
 		.equip {
+			--equip-size: 60px;
 			background: url(equip_spritesheet.png);
 			display: block;
-			height: 80px;
-			width: 80px;
+			width: var(--equip-size);
+			height: var(--equip-size);
+			background-size: 2100%;
+			/* 1680px image / 80px tiles = 21, so scale up by 21x */
 		}
 		
 		.hide {
@@ -563,7 +574,7 @@ It's all hidden by default, of course. -->
 			Equip Remix works as such:
 			The game uses a "seed" value in the save file and generates a new random order in which said equipment is obtained.
 			Whenever you would obtain an equipment of a specific type, you'll get the next equipment you don't have from the list.
-			(If you haven't "recruited" Lance, some equips may be slightly out-of-order due to a programming quirk. To ensure a truly correct order, then save, quit, and reload the file.)
+			(If you haven't "recruited" Lance yet, you may obtain some equips slightly out-of-order due to a programming quirk. To ensure a truly correct order, make sure you re-load the game after saving.)
 			
 			<p id = "result">wow</p>
 		</details>

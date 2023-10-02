@@ -1,735 +1,735 @@
 .sword0 {
-background-position: -0px -0px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -0);
 }
 .sword1 {
-background-position: -80px -0px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -0);
 }
 .sword2 {
-background-position: -160px -0px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -0);
 }
 .sword3 {
-background-position: -240px -0px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -0);
 }
 .sword4 {
-background-position: -320px -0px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -0);
 }
 .sword5 {
-background-position: -400px -0px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -0);
 }
 .sword6 {
-background-position: -480px -0px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -0);
 }
 .sword7 {
-background-position: -560px -0px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -0);
 }
 .sword8 {
-background-position: -640px -0px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -0);
 }
 .sword9 {
-background-position: -720px -0px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -0);
 }
 .sword10 {
-background-position: -800px -0px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -0);
 }
 .sword11 {
-background-position: -880px -0px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -0);
 }
 .sword12 {
-background-position: -960px -0px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -0);
 }
 .sword13 {
-background-position: -1040px -0px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -0);
 }
 .sword14 {
-background-position: -1120px -0px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -0);
 }
 .sword15 {
-background-position: -1200px -0px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -0);
 }
 .sword16 {
-background-position: -1280px -0px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -0);
 }
 .sword17 {
-background-position: -1360px -0px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -0);
 }
 .sword18 {
-background-position: -1440px -0px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -0);
 }
 .sword19 {
-background-position: -1520px -0px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -0);
 }
 .sword20 {
-background-position: -1600px -0px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -0);
 }
 .staff0 {
-background-position: -0px -80px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -1);
 }
 .staff1 {
-background-position: -80px -80px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -1);
 }
 .staff2 {
-background-position: -160px -80px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -1);
 }
 .staff3 {
-background-position: -240px -80px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -1);
 }
 .staff4 {
-background-position: -320px -80px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -1);
 }
 .staff5 {
-background-position: -400px -80px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -1);
 }
 .staff6 {
-background-position: -480px -80px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -1);
 }
 .staff7 {
-background-position: -560px -80px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -1);
 }
 .staff8 {
-background-position: -640px -80px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -1);
 }
 .staff9 {
-background-position: -720px -80px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -1);
 }
 .staff10 {
-background-position: -800px -80px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -1);
 }
 .staff11 {
-background-position: -880px -80px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -1);
 }
 .staff12 {
-background-position: -960px -80px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -1);
 }
 .staff13 {
-background-position: -1040px -80px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -1);
 }
 .staff14 {
-background-position: -1120px -80px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -1);
 }
 .staff15 {
-background-position: -1200px -80px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -1);
 }
 .staff16 {
-background-position: -1280px -80px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -1);
 }
 .staff17 {
-background-position: -1360px -80px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -1);
 }
 .staff18 {
-background-position: -1440px -80px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -1);
 }
 .staff19 {
-background-position: -1520px -80px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -1);
 }
 .staff20 {
-background-position: -1600px -80px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -1);
 }
 .gun0 {
-background-position: -0px -160px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -2);
 }
 .gun1 {
-background-position: -80px -160px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -2);
 }
 .gun2 {
-background-position: -160px -160px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -2);
 }
 .gun3 {
-background-position: -240px -160px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -2);
 }
 .gun4 {
-background-position: -320px -160px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -2);
 }
 .gun5 {
-background-position: -400px -160px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -2);
 }
 .gun6 {
-background-position: -480px -160px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -2);
 }
 .gun7 {
-background-position: -560px -160px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -2);
 }
 .gun8 {
-background-position: -640px -160px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -2);
 }
 .gun9 {
-background-position: -720px -160px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -2);
 }
 .gun10 {
-background-position: -800px -160px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -2);
 }
 .gun11 {
-background-position: -880px -160px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -2);
 }
 .gun12 {
-background-position: -960px -160px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -2);
 }
 .gun13 {
-background-position: -1040px -160px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -2);
 }
 .gun14 {
-background-position: -1120px -160px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -2);
 }
 .gun15 {
-background-position: -1200px -160px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -2);
 }
 .gun16 {
-background-position: -1280px -160px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -2);
 }
 .gun17 {
-background-position: -1360px -160px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -2);
 }
 .gun18 {
-background-position: -1440px -160px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -2);
 }
 .gun19 {
-background-position: -1520px -160px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -2);
 }
 .gun20 {
-background-position: -1600px -160px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -2);
 }
 .bow0 {
-background-position: -0px -240px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -3);
 }
 .bow1 {
-background-position: -80px -240px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -3);
 }
 .bow2 {
-background-position: -160px -240px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -3);
 }
 .bow3 {
-background-position: -240px -240px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -3);
 }
 .bow4 {
-background-position: -320px -240px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -3);
 }
 .bow5 {
-background-position: -400px -240px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -3);
 }
 .bow6 {
-background-position: -480px -240px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -3);
 }
 .bow7 {
-background-position: -560px -240px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -3);
 }
 .bow8 {
-background-position: -640px -240px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -3);
 }
 .bow9 {
-background-position: -720px -240px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -3);
 }
 .bow10 {
-background-position: -800px -240px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -3);
 }
 .bow11 {
-background-position: -880px -240px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -3);
 }
 .bow12 {
-background-position: -960px -240px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -3);
 }
 .bow13 {
-background-position: -1040px -240px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -3);
 }
 .bow14 {
-background-position: -1120px -240px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -3);
 }
 .bow15 {
-background-position: -1200px -240px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -3);
 }
 .bow16 {
-background-position: -1280px -240px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -3);
 }
 .bow17 {
-background-position: -1360px -240px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -3);
 }
 .bow18 {
-background-position: -1440px -240px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -3);
 }
 .bow19 {
-background-position: -1520px -240px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -3);
 }
 .bow20 {
-background-position: -1600px -240px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -3);
 }
 .toy0 {
-background-position: -0px -320px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -4);
 }
 .toy1 {
-background-position: -80px -320px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -4);
 }
 .toy2 {
-background-position: -160px -320px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -4);
 }
 .toy3 {
-background-position: -240px -320px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -4);
 }
 .toy4 {
-background-position: -320px -320px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -4);
 }
 .toy5 {
-background-position: -400px -320px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -4);
 }
 .toy6 {
-background-position: -480px -320px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -4);
 }
 .toy7 {
-background-position: -560px -320px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -4);
 }
 .toy8 {
-background-position: -640px -320px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -4);
 }
 .toy9 {
-background-position: -720px -320px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -4);
 }
 .toy10 {
-background-position: -800px -320px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -4);
 }
 .toy11 {
-background-position: -880px -320px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -4);
 }
 .toy12 {
-background-position: -960px -320px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -4);
 }
 .toy13 {
-background-position: -1040px -320px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -4);
 }
 .toy14 {
-background-position: -1120px -320px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -4);
 }
 .toy15 {
-background-position: -1200px -320px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -4);
 }
 .toy16 {
-background-position: -1280px -320px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -4);
 }
 .toy17 {
-background-position: -1360px -320px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -4);
 }
 .toy18 {
-background-position: -1440px -320px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -4);
 }
 .toy19 {
-background-position: -1520px -320px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -4);
 }
 .toy20 {
-background-position: -1600px -320px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -4);
 }
 .hatm0 {
-background-position: -0px -400px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -5);
 }
 .hatm1 {
-background-position: -80px -400px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -5);
 }
 .hatm2 {
-background-position: -160px -400px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -5);
 }
 .hatm3 {
-background-position: -240px -400px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -5);
 }
 .hatm4 {
-background-position: -320px -400px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -5);
 }
 .hatm5 {
-background-position: -400px -400px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -5);
 }
 .hatm6 {
-background-position: -480px -400px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -5);
 }
 .hatm7 {
-background-position: -560px -400px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -5);
 }
 .hatm8 {
-background-position: -640px -400px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -5);
 }
 .hatm9 {
-background-position: -720px -400px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -5);
 }
 .hatm10 {
-background-position: -800px -400px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -5);
 }
 .hatm11 {
-background-position: -880px -400px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -5);
 }
 .hatm12 {
-background-position: -960px -400px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -5);
 }
 .hatm13 {
-background-position: -1040px -400px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -5);
 }
 .hatm14 {
-background-position: -1120px -400px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -5);
 }
 .hatm15 {
-background-position: -1200px -400px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -5);
 }
 .hatm16 {
-background-position: -1280px -400px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -5);
 }
 .hatm17 {
-background-position: -1360px -400px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -5);
 }
 .hatm18 {
-background-position: -1440px -400px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -5);
 }
 .hatm19 {
-background-position: -1520px -400px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -5);
 }
 .hatm20 {
-background-position: -1600px -400px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -5);
 }
 .armorm0 {
-background-position: -0px -480px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -6);
 }
 .armorm1 {
-background-position: -80px -480px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -6);
 }
 .armorm2 {
-background-position: -160px -480px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -6);
 }
 .armorm3 {
-background-position: -240px -480px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -6);
 }
 .armorm4 {
-background-position: -320px -480px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -6);
 }
 .armorm5 {
-background-position: -400px -480px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -6);
 }
 .armorm6 {
-background-position: -480px -480px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -6);
 }
 .armorm7 {
-background-position: -560px -480px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -6);
 }
 .armorm8 {
-background-position: -640px -480px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -6);
 }
 .armorm9 {
-background-position: -720px -480px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -6);
 }
 .armorm10 {
-background-position: -800px -480px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -6);
 }
 .armorm11 {
-background-position: -880px -480px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -6);
 }
 .armorm12 {
-background-position: -960px -480px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -6);
 }
 .armorm13 {
-background-position: -1040px -480px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -6);
 }
 .armorm14 {
-background-position: -1120px -480px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -6);
 }
 .armorm15 {
-background-position: -1200px -480px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -6);
 }
 .armorm16 {
-background-position: -1280px -480px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -6);
 }
 .armorm17 {
-background-position: -1360px -480px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -6);
 }
 .armorm18 {
-background-position: -1440px -480px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -6);
 }
 .armorm19 {
-background-position: -1520px -480px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -6);
 }
 .armorm20 {
-background-position: -1600px -480px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -6);
 }
 .hatf0 {
-background-position: -0px -560px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -7);
 }
 .hatf1 {
-background-position: -80px -560px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -7);
 }
 .hatf2 {
-background-position: -160px -560px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -7);
 }
 .hatf3 {
-background-position: -240px -560px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -7);
 }
 .hatf4 {
-background-position: -320px -560px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -7);
 }
 .hatf5 {
-background-position: -400px -560px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -7);
 }
 .hatf6 {
-background-position: -480px -560px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -7);
 }
 .hatf7 {
-background-position: -560px -560px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -7);
 }
 .hatf8 {
-background-position: -640px -560px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -7);
 }
 .hatf9 {
-background-position: -720px -560px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -7);
 }
 .hatf10 {
-background-position: -800px -560px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -7);
 }
 .hatf11 {
-background-position: -880px -560px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -7);
 }
 .hatf12 {
-background-position: -960px -560px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -7);
 }
 .hatf13 {
-background-position: -1040px -560px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -7);
 }
 .hatf14 {
-background-position: -1120px -560px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -7);
 }
 .hatf15 {
-background-position: -1200px -560px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -7);
 }
 .hatf16 {
-background-position: -1280px -560px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -7);
 }
 .hatf17 {
-background-position: -1360px -560px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -7);
 }
 .hatf18 {
-background-position: -1440px -560px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -7);
 }
 .hatf19 {
-background-position: -1520px -560px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -7);
 }
 .hatf20 {
-background-position: -1600px -560px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -7);
 }
 .armorf0 {
-background-position: -0px -640px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -8);
 }
 .armorf1 {
-background-position: -80px -640px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -8);
 }
 .armorf2 {
-background-position: -160px -640px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -8);
 }
 .armorf3 {
-background-position: -240px -640px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -8);
 }
 .armorf4 {
-background-position: -320px -640px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -8);
 }
 .armorf5 {
-background-position: -400px -640px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -8);
 }
 .armorf6 {
-background-position: -480px -640px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -8);
 }
 .armorf7 {
-background-position: -560px -640px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -8);
 }
 .armorf8 {
-background-position: -640px -640px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -8);
 }
 .armorf9 {
-background-position: -720px -640px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -8);
 }
 .armorf10 {
-background-position: -800px -640px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -8);
 }
 .armorf11 {
-background-position: -880px -640px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -8);
 }
 .armorf12 {
-background-position: -960px -640px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -8);
 }
 .armorf13 {
-background-position: -1040px -640px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -8);
 }
 .armorf14 {
-background-position: -1120px -640px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -8);
 }
 .armorf15 {
-background-position: -1200px -640px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -8);
 }
 .armorf16 {
-background-position: -1280px -640px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -8);
 }
 .armorf17 {
-background-position: -1360px -640px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -8);
 }
 .armorf18 {
-background-position: -1440px -640px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -8);
 }
 .armorf19 {
-background-position: -1520px -640px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -8);
 }
 .armorf20 {
-background-position: -1600px -640px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -8);
 }
 .flair0 {
-background-position: -0px -720px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -9);
 }
 .flair1 {
-background-position: -80px -720px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -9);
 }
 .flair2 {
-background-position: -160px -720px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -9);
 }
 .flair3 {
-background-position: -240px -720px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -9);
 }
 .flair4 {
-background-position: -320px -720px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -9);
 }
 .flair5 {
-background-position: -400px -720px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -9);
 }
 .flair6 {
-background-position: -480px -720px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -9);
 }
 .flair7 {
-background-position: -560px -720px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -9);
 }
 .flair8 {
-background-position: -640px -720px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -9);
 }
 .flair9 {
-background-position: -720px -720px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -9);
 }
 .flair10 {
-background-position: -800px -720px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -9);
 }
 .flair11 {
-background-position: -880px -720px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -9);
 }
 .flair12 {
-background-position: -960px -720px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -9);
 }
 .flair13 {
-background-position: -1040px -720px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -9);
 }
 .flair14 {
-background-position: -1120px -720px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -9);
 }
 .flair15 {
-background-position: -1200px -720px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -9);
 }
 .flair16 {
-background-position: -1280px -720px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -9);
 }
 .flair17 {
-background-position: -1360px -720px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -9);
 }
 .flair18 {
-background-position: -1440px -720px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -9);
 }
 .flair19 {
-background-position: -1520px -720px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -9);
 }
 .flair20 {
-background-position: -1600px -720px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -9);
 }
 .flair21 {
-background-position: -0px -800px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -10);
 }
 .flair22 {
-background-position: -80px -800px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -10);
 }
 .flair23 {
-background-position: -160px -800px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -10);
 }
 .flair24 {
-background-position: -240px -800px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -10);
 }
 .flair25 {
-background-position: -320px -800px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -10);
 }
 .flair26 {
-background-position: -400px -800px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -10);
 }
 .flair27 {
-background-position: -480px -800px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -10);
 }
 .flair28 {
-background-position: -560px -800px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -10);
 }
 .flair29 {
-background-position: -640px -800px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -10);
 }
 .flair30 {
-background-position: -720px -800px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -10);
 }
 .flair31 {
-background-position: -800px -800px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -10);
 }
 .flair32 {
-background-position: -880px -800px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -10);
 }
 .flair33 {
-background-position: -960px -800px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -10);
 }
 .flair34 {
-background-position: -1040px -800px;
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -10);
 }
 .flair35 {
-background-position: -1120px -800px;
+background-position: calc(var(--equip-size) * -14) calc(var(--equip-size) * -10);
 }
 .flair36 {
-background-position: -1200px -800px;
+background-position: calc(var(--equip-size) * -15) calc(var(--equip-size) * -10);
 }
 .flair37 {
-background-position: -1280px -800px;
+background-position: calc(var(--equip-size) * -16) calc(var(--equip-size) * -10);
 }
 .flair38 {
-background-position: -1360px -800px;
+background-position: calc(var(--equip-size) * -17) calc(var(--equip-size) * -10);
 }
 .flair39 {
-background-position: -1440px -800px;
+background-position: calc(var(--equip-size) * -18) calc(var(--equip-size) * -10);
 }
 .flair40 {
-background-position: -1520px -800px;
+background-position: calc(var(--equip-size) * -19) calc(var(--equip-size) * -10);
 }
 .flair41 {
-background-position: -1600px -800px;
+background-position: calc(var(--equip-size) * -20) calc(var(--equip-size) * -10);
 }
 .flair42 {
-background-position: -0px -880px;
+background-position: calc(var(--equip-size) * -0) calc(var(--equip-size) * -11);
 }
 .flair43 {
-background-position: -80px -880px;
+background-position: calc(var(--equip-size) * -1) calc(var(--equip-size) * -11);
 }
 .flair44 {
-background-position: -160px -880px;
+background-position: calc(var(--equip-size) * -2) calc(var(--equip-size) * -11);
 }
 .flair45 {
-background-position: -240px -880px;
+background-position: calc(var(--equip-size) * -3) calc(var(--equip-size) * -11);
 }
 .flair46 {
-background-position: -320px -880px;
+background-position: calc(var(--equip-size) * -4) calc(var(--equip-size) * -11);
 }
 .flair47 {
-background-position: -400px -880px;
+background-position: calc(var(--equip-size) * -5) calc(var(--equip-size) * -11);
 }
 .flair48 {
-background-position: -480px -880px;
+background-position: calc(var(--equip-size) * -6) calc(var(--equip-size) * -11);
 }
 .flair49 {
-background-position: -560px -880px;
+background-position: calc(var(--equip-size) * -7) calc(var(--equip-size) * -11);
 }
 .flair50 {
-background-position: -640px -880px;
+background-position: calc(var(--equip-size) * -8) calc(var(--equip-size) * -11);
 }
 .flair51 {
-background-position: -720px -880px;
+background-position: calc(var(--equip-size) * -9) calc(var(--equip-size) * -11);
 }
 .flair52 {
-background-position: -800px -880px;
+background-position: calc(var(--equip-size) * -10) calc(var(--equip-size) * -11);
 }
 .flair53 {
-background-position: -880px -880px;
+background-position: calc(var(--equip-size) * -11) calc(var(--equip-size) * -11);
 }
 .flair54 {
-background-position: -960px -880px;
+background-position: calc(var(--equip-size) * -12) calc(var(--equip-size) * -11);
 }
- .equipEmpty {
-background-position: -1040px -880px;
- }
+.equipEmpty {
+background-position: calc(var(--equip-size) * -13) calc(var(--equip-size) * -11);
+}
