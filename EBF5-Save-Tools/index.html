@@ -51,12 +51,20 @@
 		  color: white;
 		}
 		
-		.small {
+		.small, .equip.small {
 			--equip-size: 20px;
 		}
 		
-		.medium {
+		.medium, .equip.medium {
 			--equip-size: 40px;
+		}
+		
+		.large, .equip.large {
+			--equip-size: 80px;
+		}
+		
+		.absurdly_gigantic, .equip.absurdly_gigantic {
+			--equip-size: 160px;
 		}
 		
 		.equip {
@@ -67,6 +75,16 @@
 			height: var(--equip-size);
 			background-size: 2100%;
 			/* 1680px image / 80px tiles = 21, so scale up by 21x */
+		}
+		
+		.craftitem {
+			--equip-size: 60px;
+			background: url(craftitems_spritesheet.png);
+			display: block;
+			width: var(--equip-size);
+			height: var(--equip-size);
+			background-size: 1000%;
+			/* 800px image / 80px tiles = 10, so scale up by 10x */
 		}
 		
 		.hide {
@@ -82,14 +100,80 @@
 		</style>
 		
 	<link rel="stylesheet" href="equip_styles.css"/>
+	<link rel="stylesheet" href="craftitem_styles.css"/>
 	
 	<script src = "localization.js"></script>
 	
 	<script src = "fullEquipList.js"></script>
+	<script src = "fullItemList.js"></script>
 	
 	<script src = "defaultFile.js"></script>
 	
 	<script>
+		window.onload = function() {
+			preparePlayerEquipTable();
+			prepareCraftitemTable();
+		}
+		
+		function preparePlayerEquipTable() {
+			const names = new Array('matt', 'natz', 'lance', 'anna', 'nolegs')
+			const weaponTypes = new Array('sword', 'staff', 'gun', 'bow', 'toy')
+			const armorTypes = new Array('m', 'f', 'm', 'f', 'm')
+			const equipTypes = new Array("Weapon", "Hat", "Armor", "Flair1", "Flair2", "Flair3")
+			let tableString = ""
+			for(let i = 0; i < names.length; i++) {
+				tableString += "<td><table>"
+				for(let y = 0; y < 2; y++) {
+					tableString += "<tr>"
+					for(let x = 0; x < 3; x++) {
+						let equipString = equipTypes[y * 3 + x].toLowerCase()
+						if(y === 0) {
+							if(x === 0) {
+								equipString = weaponTypes[i]
+							}
+							if(x === 1 || x === 2) {
+								equipString += armorTypes[i]
+							}
+						}
+						//example completed line: <td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
+						tableString += "<td><span id=" + "\"" + names[i] + equipTypes[y * 3 + x] + "\"" + " onclick= " + "\"" + "openEquipDropdown(this, " + "'" + names[i] + "'" + ", " + "'" + equipString + "'" + ")" + "\"" + "/></td>"
+			
+					}
+					tableString += "</tr>"
+				}
+				tableString += "</table></td>"
+			}
+			document.getElementById("playerEquipTable").innerHTML = tableString;
+			/*Full block example:
+			<td><table>
+				<tr>
+					<td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
+					<td><span id="mattHat" onclick="openEquipDropdown(this, 'Matt', 'hatm');"/></td>
+					<td><span id="mattArmor" onclick="openEquipDropdown(this, 'Matt', 'armorm');"/></td>
+				</tr>
+				<tr>
+					<td><span id="mattFlair1" onclick="openEquipDropdown(this, 'Matt', 'flair1');"/></td>
+					<td><span id="mattFlair2" onclick="openEquipDropdown(this, 'Matt', 'flair2');"/></td>
+					<td><span id="mattFlair3" onclick="openEquipDropdown(this, 'Matt', 'flair3');"/></td>
+				</tr>
+			</table></td>*/
+		}
+
+		function prepareCraftitemTable() {
+			let cTable = document.getElementById("craftitemTable");
+			let tableString = "";
+			for(let y = 0; y < 6; y++) {
+				tableString += "<tr>"
+				for(let x = 0; x < 10; x++) {
+					let craftitemID = (y * 10) + x
+					tableString += "<td><span class = " + "\"" + "craftitem craftitem" + craftitemID + "\"" + " title = " + "\"" + localization['english'][craftItems[craftitemID]] + "\"" + "/></td>"
+					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"></span></td>
+				}
+				tableString += "</tr>"
+			}
+			cTable.innerHTML = tableString
+		}
+	
 		var inputFileName
 		var fileString
 		var fileObj
@@ -100,7 +184,7 @@
 		
 		function openEquipDropdown(parentElement, player, equipType) {
 			//An attempt to make calling this function a little less magic-number-y
-			const players = new Array("Matt", "Natz", "Lance", "Anna", "NoLegs");
+			const players = new Array("matt", "natz", "lance", "anna", "nolegs");
 			//Which equipment takes up which slot (for example, all weapons are in the top-left)
 			// 0 1 2
 			// 3 4 5
@@ -344,7 +428,7 @@
 		class EquipSet {
 			size = 0
 			//Internally, the game uses string matching for equipment (for example, the Flame Badge's internal ID is "firebadge")
-			//I'm using a more generic string system just for ease of use (less copy-pasting from game files)
+			//I'm using a more generic string system just for ease of use (as in, "flair00") to have less copy-pasting from game files
 			equipIDs = []
 			equipSelected = []
 			nameString = ""
@@ -503,21 +587,22 @@ It's all hidden by default, of course. -->
 		z-index: 50;" onclick = "closeEquipDropdown()">
 		<!-- First, the row of tabs for switching between types -->
 		<table><tr>
-		<td><span class = "equip dropdownTab sword0" onclick = "changeDropdownTab(event, 'sword')"></span></td>
-		<td><span class = "equip dropdownTab staff13" onclick = "changeDropdownTab(event, 'staff')"></span></td>
-		<td><span class = "equip dropdownTab gun7" onclick = "changeDropdownTab(event, 'gun')"></span></td>
-		<td><span class = "equip dropdownTab bow0" onclick = "changeDropdownTab(event, 'bow')"></span></td>
-		<td><span class = "equip dropdownTab toy17" onclick = "changeDropdownTab(event, 'toy')"></span></td>
-		<td><span class = "equip dropdownTab hatm0" onclick = "changeDropdownTab(event, 'hatm')"></span></td>
-		<td><span class = "equip dropdownTab armorm15" onclick = "changeDropdownTab(event, 'armorm')"></span></td>
-		<td><span class = "equip dropdownTab hatf0" onclick = "changeDropdownTab(event, 'hatf')"></span></td>
-		<td><span class = "equip dropdownTab armorf0" onclick = "changeDropdownTab(event, 'armorf')"></span></td>
-		<td><span class = "equip dropdownTab flair11" onclick = "changeDropdownTab(event, 'flair')"></span></td>
+		<td><span class = "large equip dropdownTab sword0" onclick = "changeDropdownTab(event, 'sword')"></span></td>
+		<td><span class = "large equip dropdownTab staff13" onclick = "changeDropdownTab(event, 'staff')"></span></td>
+		<td><span class = "large equip dropdownTab gun7" onclick = "changeDropdownTab(event, 'gun')"></span></td>
+		<td><span class = "large equip dropdownTab bow0" onclick = "changeDropdownTab(event, 'bow')"></span></td>
+		<td><span class = "large equip dropdownTab toy17" onclick = "changeDropdownTab(event, 'toy')"></span></td>
+		<td><span class = "large equip dropdownTab hatm0" onclick = "changeDropdownTab(event, 'hatm')"></span></td>
+		<td><span class = "large equip dropdownTab armorm15" onclick = "changeDropdownTab(event, 'armorm')"></span></td>
+		<td><span class = "large equip dropdownTab hatf0" onclick = "changeDropdownTab(event, 'hatf')"></span></td>
+		<td><span class = "large equip dropdownTab armorf0" onclick = "changeDropdownTab(event, 'armorf')"></span></td>
+		<td><span class = "large equip dropdownTab flair11" onclick = "changeDropdownTab(event, 'flair')"></span></td>
 		</tr></table>
 		<!-- Equipment table is placed here! -->
 		<div id = "dropdownTable"> </div>
 	</div>
-
+	
+<noscript>Hello! Despite my best efforts, this site needs JavaScript enabled in order to properly read and modify the save files.</noscript>
 <br>
 <!-- First, buttons for loading / saving files -->
 <label for="loader" class="clickButton">Load Existing File From PC</label>
@@ -528,6 +613,7 @@ It's all hidden by default, of course. -->
 <input value = "Save File" class="clickButton" onclick = "saveFile()" type=button />
 <br>
 <br>
+<div class="craftitem craftitem1"></div>
 <!-- The "everything" span is hidden until a file is loaded-->
 <span id = "everything" style="display:none">
 	<!-- First block for general save file statistics -->
@@ -671,68 +757,10 @@ It's all hidden by default, of course. -->
 				<td>HPstr<input type="text" id="nolegsHPstr" size="2" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
 			</table></td>
 		  </tr>
-		  <tr>
-			<!-- Nested 2x3 table for character equips -->
-			<td><table>
-				<tr>
-					<td><span id="mattWeapon" onclick="openEquipDropdown(this, 'Matt', 'sword');"/></td>
-					<td><span id="mattHat" onclick="openEquipDropdown(this, 'Matt', 'hatm');"/></td>
-					<td><span id="mattArmor" onclick="openEquipDropdown(this, 'Matt', 'armorm');"/></td>
-				</tr>
-				<tr>
-					<td><span id="mattFlair1" onclick="openEquipDropdown(this, 'Matt', 'flair1');"/></td>
-					<td><span id="mattFlair2" onclick="openEquipDropdown(this, 'Matt', 'flair2');"/></td>
-					<td><span id="mattFlair3" onclick="openEquipDropdown(this, 'Matt', 'flair3');"/></td>
-				</tr>
-			</table></td>
-			<td><table>
-				<tr>
-					<td><span id="natzWeapon" onclick="openEquipDropdown(this, 'Natz', 'staff');"></span></td>
-					<td><span id="natzHat" onclick="openEquipDropdown(this, 'Natz', 'hatf');"/></td>
-					<td><span id="natzArmor" onclick="openEquipDropdown(this, 'Natz', 'armorf');"/></td>
-				</tr>
-				<tr>
-					<td><span id="natzFlair1" onclick="openEquipDropdown(this, 'Natz', 'flair1');"/></td>
-					<td><span id="natzFlair2" onclick="openEquipDropdown(this, 'Natz', 'flair2');"/></td>
-					<td><span id="natzFlair3" onclick="openEquipDropdown(this, 'Natz', 'flair3');"/></td>
-				</tr>
-			</table></td>
-			<td><table>
-				<tr>
-					<td><span id="lanceWeapon" onclick="openEquipDropdown(this, 'Lance', 'gun');"/></td>
-					<td><span id="lanceHat" onclick="openEquipDropdown(this, 'Lance', 'hatm');"/></td>
-					<td><span id="lanceArmor" onclick="openEquipDropdown(this, 'Lance', 'armorm');"/></td>
-				</tr>
-				<tr>
-					<td><span id="lanceFlair1" onclick="openEquipDropdown(this, 'Lance', 'flair1');"/></td>
-					<td><span id="lanceFlair2" onclick="openEquipDropdown(this, 'Lance', 'flair2');"/></td>
-					<td><span id="lanceFlair3" onclick="openEquipDropdown(this, 'Lance', 'flair3');"/></td>
-				</tr>
-			</table></td>
-			<td><table>
-				<tr>
-					<td><span id="annaWeapon" onclick="openEquipDropdown(this, 'Anna', 'bow');"/></td>
-					<td><span id="annaHat" onclick="openEquipDropdown(this, 'Anna', 'hatf');"/></td>
-					<td><span id="annaArmor" onclick="openEquipDropdown(this, 'Anna', 'armorf');"/></td>
-				</tr>
-				<tr>
-					<td><span id="annaFlair1" onclick="openEquipDropdown(this, 'Anna', 'flair1');"/></td>
-					<td><span id="annaFlair2" onclick="openEquipDropdown(this, 'Anna', 'flair2');"/></td>
-					<td><span id="annaFlair3" onclick="openEquipDropdown(this, 'Anna', 'flair3');"/></td>
-				</tr>
-			</table></td>
-			<td><table>
-				<tr>
-					<td><span id="nolegsWeapon" onclick="openEquipDropdown(this, 'NoLegs', 'toy');"/></td>
-					<td><span id="nolegsHat" onclick="openEquipDropdown(this, 'NoLegs', 'hatm');"/></td>
-					<td><span id="nolegsArmor" onclick="openEquipDropdown(this, 'NoLegs', 'armorm');"/></td>
-				</tr>
-				<tr>
-					<td><span id="nolegsFlair1" onclick="openEquipDropdown(this, 'NoLegs', 'flair1');"/></td>
-					<td><span id="nolegsFlair2" onclick="openEquipDropdown(this, 'NoLegs', 'flair2');"/></td>
-					<td><span id="nolegsFlair3" onclick="openEquipDropdown(this, 'NoLegs', 'flair3');"/></td>
-				</tr>
-			</table></td>
+		<!-- Nested 2x3 table for character equips -->
+		<!-- table filled out in the preparePlayerEquipTable function -->
+		  <tr id="playerEquipTable">
+			<td>Hello! Here's some filler text!</td>
 		  </tr>
 		</table>
 	</details>
@@ -749,18 +777,20 @@ It's all hidden by default, of course. -->
 	</details>
 	<br>
 	<details open>
-		<summary>Consumable Items</summary>
-		food/crafting
+		<summary>Food/Steroids</summary>
+		food
 	</details>
 	<br>
 	<details open>
-		<summary>Steroids</summary>
-		amount held and costs
+		<summary>Crafting Items</summary>
+		<!-- table filled out in the prepareCraftitemTable function -->
+		<table id="craftitemTable">
+			<td>Hello! Here's some filler text!</td>
+		</table>
 	</details>
 	<br>
 	<details open>
 		<summary>Key Items</summary>
-		food/crafting
 	</details>
 </span>
 
@@ -806,7 +836,7 @@ twoPlayerMode - [P], needs icon
 markerData - [?], requires a good chunk of testing
 onePlayerMode - [P], needs icon
 playerData - [P], missing skills, limits, and dead/not dead (if it still even functions in the game)
-equippedSummons - [?], could be mildly tricky or hellish
+equippedSummons - [?], could be mildly tricky or completely hellish
 equipSets - [T], just lists of equip ids for the equipment presets
 blocks - [?], no idea what this even does
 battlesWithResistance - [S]

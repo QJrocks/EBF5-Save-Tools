@@ -5,7 +5,6 @@
 
 int main()
 {
-    const int iconSize = 80;
     std::array<std::string, 11> names = { "sword", "staff", "gun", "bow", "toy", "hatm", "armorm", "hatf", "armorf", "flair" };
     std::array<int, 11> amounts = { 21,      21,      21,    21,    21,    21,     21,       21,     21,       55 };
     for (int y = 0; y < 11; y++) {

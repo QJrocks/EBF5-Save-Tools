@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\EBF5-Save-Tools\equipClassGenerator.cpp" />
+    <ClCompile Include="craftItemClassGenerator.cpp" />
     <ClCompile Include="randomEquipSolver.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
