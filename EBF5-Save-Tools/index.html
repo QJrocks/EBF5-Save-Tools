@@ -8,7 +8,7 @@
 		{
 		   font-size: 1em;
 		   color: #000;
-		   font-family: Verdana !important;
+		   font-family: Verdana;
 		   background-color: #7AF;
 		}
 		
@@ -16,6 +16,23 @@
 			border-width: 2px;
 			border-style: solid;
 			border-color: #FFF;
+		}
+		
+		@font-face {
+			font-family: Tahoma;
+			src: url("tahomabd.ttf");
+		}
+		
+		.itemInput {
+			border:none !important;
+			background:rgba(0,0,0,0); 
+			font-size: 1.25em; 
+			-webkit-text-stroke: 0.08rem white; 
+			font-family: Tahoma, sans-serif !important;
+			text-align: right;
+			position: absolute; 
+			bottom: 0;
+			right: 0;
 		}
 		
 		details {
@@ -51,40 +68,57 @@
 		  color: white;
 		}
 		
-		.small, .equip.small {
-			--equip-size: 20px;
+		.limitBar {
+			width: 60%;
+			accent-color: red;
 		}
 		
-		.medium, .equip.medium {
-			--equip-size: 40px;
+		.small, .equip.small, .craftitem.small, .consumableitem.small {
+			--icon-size: 30px;
+		}
+		
+		.medium, .equip.medium, .craftitem.medium, .consumableitem.medium {
+			--icon-size: 40px;
 		}
 		
 		.large, .equip.large {
-			--equip-size: 80px;
+			--icon-size: 80px;
 		}
 		
 		.absurdly_gigantic, .equip.absurdly_gigantic {
-			--equip-size: 160px;
+			--icon-size: 160px;
 		}
 		
 		.equip {
-			--equip-size: 60px;
+			--icon-size: 60px;
 			background: url(equip_spritesheet.png);
 			display: block;
-			width: var(--equip-size);
-			height: var(--equip-size);
+			width: var(--icon-size);
+			height: var(--icon-size);
 			background-size: 2100%;
 			/* 1680px image / 80px tiles = 21, so scale up by 21x */
 		}
 		
 		.craftitem {
-			--equip-size: 60px;
+			--icon-size: 60px;
 			background: url(craftitems_spritesheet.png);
 			display: block;
-			width: var(--equip-size);
-			height: var(--equip-size);
+			width: var(--icon-size);
+			height: var(--icon-size);
 			background-size: 1000%;
 			/* 800px image / 80px tiles = 10, so scale up by 10x */
+			position:relative;
+		}
+		
+		.consumableitem {
+			--icon-size: 60px;
+			background: url(consumableitems_spritesheet.png);
+			display: block;
+			width: var(--icon-size);
+			height: var(--icon-size);
+			background-size: 1100%;
+			/* 880px image / 80px tiles = 11, so scale up by 11x */
+			position:relative;
 		}
 		
 		.hide {
@@ -101,6 +135,7 @@
 		
 	<link rel="stylesheet" href="equip_styles.css"/>
 	<link rel="stylesheet" href="craftitem_styles.css"/>
+	<link rel="stylesheet" href="consumableitem_styles.css"/>
 	
 	<script src = "localization.js"></script>
 	
@@ -113,6 +148,7 @@
 		window.onload = function() {
 			preparePlayerEquipTable();
 			prepareCraftitemTable();
+			prepareConsumableitemTable();
 		}
 		
 		function preparePlayerEquipTable() {
@@ -166,7 +202,44 @@
 				tableString += "<tr>"
 				for(let x = 0; x < 10; x++) {
 					let craftitemID = (y * 10) + x
-					tableString += "<td><span class = " + "\"" + "craftitem craftitem" + craftitemID + "\"" + " title = " + "\"" + localization['english'][craftItems[craftitemID]] + "\"" + "/></td>"
+					let itemID = craftitemID + 48
+					tableString += "<td><span class = " + "\"" + "craftitem craftitem" + craftitemID + "\"" + " title = " + "\"" + localization['english'][craftItems[craftitemID]] + "\"" + "/>"
+					tableString += "<input type='text' class = 'itemInput' id='craftitemVal" + craftitemID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID + 48) + "] = Number(this.value)' />"
+					tableString += "</td>"
+					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"/>
+					//<input type='text' class = 'itemInput' id = 'craftitemVal0' size='3' onchange='fileObject.itemQuantities[48] = Number(this.value)' />
+					//</td>
+				}
+				tableString += "</tr>"
+			}
+			cTable.innerHTML = tableString
+		}
+
+		function prepareConsumableitemTable() {
+			let cTable = document.getElementById("consumableitemTable");
+			let tableString = "";
+			for(let y = 0; y < 3; y++) {
+				tableString += "<tr>"
+				for(let x = 0; x < 8; x++) {
+					let foodID = (y * 8) + x
+					let consumableID = foodID
+					let itemID = foodID
+					tableString += "<td><span class = " + "\"" + "consumableitem consumableitem" + consumableID + "\"" + " title = " + "\"" + localization['english'][foodItems[foodID]] + "\"" + "/>"
+					tableString += "<input type='text' class = 'itemInput' id='fooditemVal" + foodID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
+					tableString += "</td>"
+					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"></span></td>
+				}
+				tableString += "</tr>"
+			}
+			for(let y = 0; y < 5; y++) {
+				tableString += "<tr>"
+				for(let x = 0; x < 4; x++) {
+					let steroidID = (y * 4) + x
+					let consumableID = steroidID + 24
+					let itemID = steroidID + 28
+					tableString += "<td><span class = " + "\"" + "consumableitem consumableitem" + consumableID + "\"" + " title = " + "\"" + localization['english'][steroidItems[steroidID]] + "\"" + "/>"
+					tableString += "<input type='text' class = 'itemInput' id='steroiditemVal" + steroidID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
+					tableString += "</td>"
 					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"></span></td>
 				}
 				tableString += "</tr>"
@@ -361,6 +434,27 @@
 			document.getElementById("1Pbattles").checked = fileObj["onePlayerMode"];
 			document.getElementById("limitLimitedPlayers").checked = false;
 			
+			
+			//item quantities wooo
+			for(let x = 0; x < 24; x++) {
+				//food			
+				let foodID = x;
+				document.getElementById("fooditemVal" + foodID).value = fileObj.itemQuantities[x];
+			}
+			for(let x = 28; x < 48; x++) {
+				//steroids			
+				let steroidID = x - 28;
+				document.getElementById("steroiditemVal" + steroidID).value = fileObj.itemQuantities[x];
+			}
+			for(let x = 48; x < 108; x++) {
+				//craft items		
+				let craftID = x - 48;
+				document.getElementById("craftitemVal" + craftID).value = fileObj.itemQuantities[x];
+			}
+			for(let x = 108; x < 174; x++) {
+				//key items			
+			}
+			
 			if(fileObj["altEquipLocations"] === true) {
 				calculateRandEquips(prevLoaded)
 			}
@@ -371,6 +465,12 @@
 				window.alert("Load a file, first!");
 				return;
 			}
+			
+			//copy duplicated item quantities (throwables), just to be safe
+			fileObj.itemQuantities[24] = fileObj.itemQuantities[48];
+			fileObj.itemQuantities[25] = fileObj.itemQuantities[50];
+			fileObj.itemQuantities[26] = fileObj.itemQuantities[55];
+			fileObj.itemQuantities[27] = fileObj.itemQuantities[60];
 		
 			//Append "_edited" at the end of the filename to help avoid file corruption (original file is intact)
 			let filename = inputFileName.split('.')[0] + "_edited.meow";
@@ -613,7 +713,6 @@ It's all hidden by default, of course. -->
 <input value = "Save File" class="clickButton" onclick = "saveFile()" type=button />
 <br>
 <br>
-<div class="craftitem craftitem1"></div>
 <!-- The "everything" span is hidden until a file is loaded-->
 <span id = "everything" style="display:none">
 	<!-- First block for general save file statistics -->
@@ -661,6 +760,10 @@ It's all hidden by default, of course. -->
 			The game uses a "seed" value in the save file and generates a new random order in which said equipment is obtained.
 			Whenever you would obtain an equipment of a specific type, you'll get the next equipment you don't have from the list.
 			(If you haven't "recruited" Lance yet, you may obtain some equips slightly out-of-order due to a programming quirk. To ensure a truly correct order, make sure you re-load the game after saving.)
+			<br>
+			<br>
+			In the next update probably, you'll be able to see the order in which you would gain all your equipment types.
+			But not now.
 			
 			<p id = "result">wow</p>
 		</details>
@@ -716,45 +819,85 @@ It's all hidden by default, of course. -->
 		  </tr>
 		  <tr>
 			<!-- LIMIT -->
-			<td>Limit: <input type="range" min="0" max="100" id="mattLimit" size="5" onchange="fileObj.playerData[0][2] = this.value"/> </td>
-			<td>Limit: <input type="range" min="0" max="100" id="natzLimit" size="5" onchange="fileObj.playerData[1][2] = this.value"/> </td>
-			<td>Limit: <input type="range" min="0" max="100" id="lanceLimit" size="5" onchange="fileObj.playerData[2][2] = this.value"/> </td>
-			<td>Limit: <input type="range" min="0" max="100" id="annaLimit" size="5" onchange="fileObj.playerData[3][2] = this.value"/> </td>
-			<td>Limit: <input type="range" min="0" max="100" id="nolegsLimit" size="5" onchange="fileObj.playerData[4][2] = this.value"/> </td>
+			<td>Limit: <input type="range" class="limitBar" min="0" max="100" id="mattLimit" onchange="fileObj.playerData[0][2] = this.value"/> </td>
+			<td>Limit: <input type="range" class="limitBar" min="0" max="100" id="natzLimit" onchange="fileObj.playerData[1][2] = this.value"/> </td>
+			<td>Limit: <input type="range" class="limitBar" min="0" max="100" id="lanceLimit" onchange="fileObj.playerData[2][2] = this.value"/> </td>
+			<td>Limit: <input type="range" class="limitBar" min="0" max="100" id="annaLimit" onchange="fileObj.playerData[3][2] = this.value"/> </td>
+			<td>Limit: <input type="range" class="limitBar" min="0" max="100" id="nolegsLimit" onchange="fileObj.playerData[4][2] = this.value"/> </td>
 		  </tr>
 		  <tr>
 			<!-- Nested table for amount of steroids used -->
 			<!-- Instead of storing the multipliers, they're converted to steroid amounts upon loading and converted back upon saving.
 			The ID acronyms stand for "Attack/Defense", "Magic Attack/Magic Defense", "Evade/Accuracy", and "HP" -->
 			<td><table>
-				<td>ADstr<input type="text" id="mattADstr" size="2" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>MMstr<input type="text" id="mattMMstr" size="2" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>EAstr<input type="text" id="mattEAstr" size="2" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-				<td>HPstr<input type="text" id="mattHPstr" size="2" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td><span class="medium consumableitem consumableitem24">
+					<input type="text" id="mattADstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem25">
+					<input type="text" id="mattMMstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem26">
+					<input type="text" id="mattEAstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem27">
+					<input type="text" id="mattHPstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
 			</table></td>
 			<td><table>
-				<td>ADstr<input type="text" id="natzADstr" size="2" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>MMstr<input type="text" id="natzMMstr" size="2" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>EAstr<input type="text" id="natzEAstr" size="2" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-				<td>HPstr<input type="text" id="natzHPstr" size="2" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td><span class="medium consumableitem consumableitem28">
+					<input type="text" id="natzADstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem29">
+					<input type="text" id="natzMMstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem30">
+					<input type="text" id="natzEAstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem31">
+					<input type="text" id="natzHPstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
 			</table></td>
 			<td><table>
-				<td>ADstr<input type="text" id="lanceADstr" size="2" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>MMstr<input type="text" id="lanceMMstr" size="2" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>EAstr<input type="text" id="lanceEAstr" size="2" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-				<td>HPstr<input type="text" id="lanceHPstr" size="2" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td><span class="medium consumableitem consumableitem32">
+					<input type="text" id="lanceADstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem33">
+					<input type="text" id="lanceMMstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem34">
+					<input type="text" id="lanceEAstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem35">
+					<input type="text" id="lanceHPstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
 			</table></td>
 			<td><table>
-				<td>ADstr<input type="text" id="annaADstr" size="2" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>MMstr<input type="text" id="annaMMstr" size="2" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>EAstr<input type="text" id="annaEAstr" size="2" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-				<td>HPstr<input type="text" id="annaHPstr" size="2" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td><span class="medium consumableitem consumableitem36">
+					<input type="text" id="annaADstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem37">
+					<input type="text" id="annaMMstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem38">
+					<input type="text" id="annaEAstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem39">
+					<input type="text" id="annaHPstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
 			</table></td>
 			<td><table>
-				<td>ADstr<input type="text" id="nolegsADstr" size="2" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>MMstr<input type="text" id="nolegsMMstr" size="2" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/></td>
-				<td>EAstr<input type="text" id="nolegsEAstr" size="2" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/></td>
-				<td>HPstr<input type="text" id="nolegsHPstr" size="2" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/></td>
+				<td><span class="medium consumableitem consumableitem40">
+					<input type="text" id="nolegsADstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem41">
+					<input type="text" id="nolegsMMstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem42">
+					<input type="text" id="nolegsEAstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+				</span></td>
+				<td><span class="medium consumableitem consumableitem43">
+					<input type="text" id="nolegsHPstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+				</span></td>
 			</table></td>
 		  </tr>
 		<!-- Nested 2x3 table for character equips -->
@@ -765,7 +908,6 @@ It's all hidden by default, of course. -->
 		</table>
 	</details>
 	<br>
-	<span style = "font-size:90px"> !!! --- EVERYTHING BELOW IS NOT IMPLEMENTED AND IS MAINLY THERE FOR ORGANIZATION PURPOSES --- !!! </span>
 	<details open>
 		<summary>Player Skills and Limits</summary>
 		Work in progress!
@@ -773,12 +915,16 @@ It's all hidden by default, of course. -->
 	<br>
 	<details open>
 		<summary>Obtained Equipment and Levels</summary>
-		<input value = "Obtain/Remove equipment" class="clickButton" onclick = "//window.alert('me when the')" type=button />
+		<!-- <input value = "Obtain/Remove equipment" class="clickButton" onclick = "//window.alert('me when the')" type=button /> -->
+		<input value = "Work in progress!" class="clickButton" type=button />
 	</details>
 	<br>
 	<details open>
-		<summary>Food/Steroids</summary>
-		food
+		<summary>Consumable Items</summary>
+		<!-- table filled out in the prepareConsumableitemTable function -->
+		<table id="consumableitemTable">
+			<td>Hello! Here's some filler text!</td>
+		</table>
 	</details>
 	<br>
 	<details open>
@@ -791,6 +937,7 @@ It's all hidden by default, of course. -->
 	<br>
 	<details open>
 		<summary>Key Items</summary>
+		Work in progress!
 	</details>
 </span>
 
@@ -824,7 +971,7 @@ textFlags - [U]
 altEquipLocations - [P], needs icon
 altFoes - [P], needs icon
 alwaysScaleFoes - [P], needs icon
-cheats - [T], presumable also includes challenges
+cheats - [T], presumably also includes challenges
 consoles - [S]
 alwaysGiveEXP - [S]
 customizations - [?]
@@ -847,13 +994,13 @@ summonInfo - [T], summon name, nickname, unknown number variable (amount capture
 gameStats - [S], a bunch of unlabelled numbers but that's what ffdec is for
 party - [S]
 equipOwnage - [N]
-shipping - [?], only 6 numbers around the same range? what it mean?
+shipping - [S], Was surprised at only 6 variables, but that's actually the total number of party pairings for the good ending
 recentSummons - [?]
 medals - [S], uses true/null instead of true/false for some reason
 scans - [T], array of magic strings instead of foe ids like summons use
 npcFlags - [U]
 questNo - [S], new game/new game+, so on and so forth
-itemQuantities - [T]
+itemQuantities - [P] - Crafting and food items done, key items not quite
 cardQuantities - [S], says "quantities" but cards are unique so they're all just 0 or 1
 -->
 

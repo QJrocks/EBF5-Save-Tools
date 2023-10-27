@@ -10,7 +10,7 @@ int main()
     for (int y = 0; y < 11; y++) {
         for (int x = 0; x < amounts[y]; x++) {
             std::cout << "." << names[y] << x << " {" << '\n';
-            std::cout << "background-position: calc(var(--equip-size) * -" << (x % 21) << ") calc(var(--equip-size) * -" << (x / 21) + y << ");" << '\n';
+            std::cout << "background-position: calc(var(--icon-size) * -" << (x % 21) << ") calc(var(--icon-size) * -" << (x / 21) + y << ");" << '\n';
             std::cout << "}" << '\n';
         }
     }

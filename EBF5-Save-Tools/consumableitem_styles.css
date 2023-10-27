@@ -1,180 +1,132 @@
-.craftitem0 {
+.consumableitem0 {
 background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -0);
 }
-.craftitem1 {
+.consumableitem1 {
 background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -0);
 }
-.craftitem2 {
+.consumableitem2 {
 background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -0);
 }
-.craftitem3 {
+.consumableitem3 {
 background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -0);
 }
-.craftitem4 {
+.consumableitem4 {
 background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -0);
 }
-.craftitem5 {
+.consumableitem5 {
 background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -0);
 }
-.craftitem6 {
+.consumableitem6 {
 background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -0);
 }
-.craftitem7 {
+.consumableitem7 {
 background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -0);
 }
-.craftitem8 {
+.consumableitem8 {
 background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -0);
 }
-.craftitem9 {
+.consumableitem9 {
 background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -0);
 }
-.craftitem10 {
+.consumableitem10 {
+background-position: calc(var(--icon-size) * -10) calc(var(--icon-size) * -0);
+}
+.consumableitem11 {
 background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -1);
 }
-.craftitem11 {
+.consumableitem12 {
 background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -1);
 }
-.craftitem12 {
+.consumableitem13 {
 background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -1);
 }
-.craftitem13 {
+.consumableitem14 {
 background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -1);
 }
-.craftitem14 {
+.consumableitem15 {
 background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -1);
 }
-.craftitem15 {
+.consumableitem16 {
 background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -1);
 }
-.craftitem16 {
+.consumableitem17 {
 background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -1);
 }
-.craftitem17 {
+.consumableitem18 {
 background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -1);
 }
-.craftitem18 {
+.consumableitem19 {
 background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -1);
 }
-.craftitem19 {
+.consumableitem20 {
 background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -1);
 }
-.craftitem20 {
+.consumableitem21 {
+background-position: calc(var(--icon-size) * -10) calc(var(--icon-size) * -1);
+}
+.consumableitem22 {
 background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -2);
 }
-.craftitem21 {
+.consumableitem23 {
 background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -2);
 }
-.craftitem22 {
+.consumableitem24 {
 background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -2);
 }
-.craftitem23 {
+.consumableitem25 {
 background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -2);
 }
-.craftitem24 {
+.consumableitem26 {
 background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -2);
 }
-.craftitem25 {
+.consumableitem27 {
 background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -2);
 }
-.craftitem26 {
+.consumableitem28 {
 background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -2);
 }
-.craftitem27 {
+.consumableitem29 {
 background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -2);
 }
-.craftitem28 {
+.consumableitem30 {
 background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -2);
 }
-.craftitem29 {
+.consumableitem31 {
 background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -2);
 }
-.craftitem30 {
+.consumableitem32 {
+background-position: calc(var(--icon-size) * -10) calc(var(--icon-size) * -2);
+}
+.consumableitem33 {
 background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -3);
 }
-.craftitem31 {
+.consumableitem34 {
 background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -3);
 }
-.craftitem32 {
+.consumableitem35 {
 background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -3);
 }
-.craftitem33 {
+.consumableitem36 {
 background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -3);
 }
-.craftitem34 {
+.consumableitem37 {
 background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -3);
 }
-.craftitem35 {
+.consumableitem38 {
 background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -3);
 }
-.craftitem36 {
+.consumableitem39 {
 background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -3);
 }
-.craftitem37 {
+.consumableitem40 {
 background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -3);
 }
-.craftitem38 {
+.consumableitem41 {
 background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -3);
 }
-.craftitem39 {
+.consumableitem42 {
 background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -3);
 }
-.craftitem40 {
-background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -4);
-}
-.craftitem41 {
-background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -4);
-}
-.craftitem42 {
-background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -4);
-}
-.craftitem43 {
-background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -4);
-}
-.craftitem44 {
-background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -4);
-}
-.craftitem45 {
-background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -4);
-}
-.craftitem46 {
-background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -4);
-}
-.craftitem47 {
-background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -4);
-}
-.craftitem48 {
-background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -4);
-}
-.craftitem49 {
-background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -4);
-}
-.craftitem50 {
-background-position: calc(var(--icon-size) * -0) calc(var(--icon-size) * -5);
-}
-.craftitem51 {
-background-position: calc(var(--icon-size) * -1) calc(var(--icon-size) * -5);
-}
-.craftitem52 {
-background-position: calc(var(--icon-size) * -2) calc(var(--icon-size) * -5);
-}
-.craftitem53 {
-background-position: calc(var(--icon-size) * -3) calc(var(--icon-size) * -5);
-}
-.craftitem54 {
-background-position: calc(var(--icon-size) * -4) calc(var(--icon-size) * -5);
-}
-.craftitem55 {
-background-position: calc(var(--icon-size) * -5) calc(var(--icon-size) * -5);
-}
-.craftitem56 {
-background-position: calc(var(--icon-size) * -6) calc(var(--icon-size) * -5);
-}
-.craftitem57 {
-background-position: calc(var(--icon-size) * -7) calc(var(--icon-size) * -5);
-}
-.craftitem58 {
-background-position: calc(var(--icon-size) * -8) calc(var(--icon-size) * -5);
-}
-.craftitem59 {
-background-position: calc(var(--icon-size) * -9) calc(var(--icon-size) * -5);
+.consumableitem43 {
+background-position: calc(var(--icon-size) * -10) calc(var(--icon-size) * -3);
 }
