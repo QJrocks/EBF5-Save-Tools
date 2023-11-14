@@ -23,16 +23,24 @@
 			src: url("tahomabd.ttf");
 		}
 		
-		.itemInput {
+		.numberFont {
 			border:none !important;
 			background:rgba(0,0,0,0); 
 			font-size: 1.25em; 
 			-webkit-text-stroke: 0.08rem white; 
 			font-family: Tahoma, sans-serif !important;
-			text-align: right;
+		}
+		
+		.iconPosBR {
 			position: absolute; 
 			bottom: 0;
-			right: 0;
+			right: 0;	
+			text-align: right;
+		}
+		
+		.iconPosBL {
+			position: absolute; 
+			bottom: 0;
 		}
 		
 		details {
@@ -69,7 +77,7 @@
 		}
 		
 		.limitBar {
-			width: 60%;
+			width: 55%;
 			accent-color: red;
 		}
 		
@@ -89,6 +97,12 @@
 			--icon-size: 160px;
 		}
 		
+		.dropdownTable {
+			position:relative; 
+			top: 20px; 
+			z-index: 100;
+		}
+		
 		.equip {
 			--icon-size: 60px;
 			background: url(equip_spritesheet.png);
@@ -97,6 +111,7 @@
 			height: var(--icon-size);
 			background-size: 2100%;
 			/* 1680px image / 80px tiles = 21, so scale up by 21x */
+			position:relative;
 		}
 		
 		.craftitem {
@@ -204,10 +219,10 @@
 					let craftitemID = (y * 10) + x
 					let itemID = craftitemID + 48
 					tableString += "<td><span class = " + "\"" + "craftitem craftitem" + craftitemID + "\"" + " title = " + "\"" + localization['english'][craftItems[craftitemID]] + "\"" + "/>"
-					tableString += "<input type='text' class = 'itemInput' id='craftitemVal" + craftitemID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID + 48) + "] = Number(this.value)' />"
+					tableString += "<input type='text' class = 'numberFont iconPosBR' id='craftitemVal" + craftitemID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID + 48) + "] = Number(this.value)' />"
 					tableString += "</td>"
 					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"/>
-					//<input type='text' class = 'itemInput' id = 'craftitemVal0' size='3' onchange='fileObject.itemQuantities[48] = Number(this.value)' />
+					//<input type='text' class = 'numberFont iconPosBR' id = 'craftitemVal0' size='3' onchange='fileObject.itemQuantities[48] = Number(this.value)' />
 					//</td>
 				}
 				tableString += "</tr>"
@@ -225,7 +240,7 @@
 					let consumableID = foodID
 					let itemID = foodID
 					tableString += "<td><span class = " + "\"" + "consumableitem consumableitem" + consumableID + "\"" + " title = " + "\"" + localization['english'][foodItems[foodID]] + "\"" + "/>"
-					tableString += "<input type='text' class = 'itemInput' id='fooditemVal" + foodID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
+					tableString += "<input type='text' class = 'numberFont iconPosBR' id='fooditemVal" + foodID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
 					tableString += "</td>"
 					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"></span></td>
 				}
@@ -238,7 +253,7 @@
 					let consumableID = steroidID + 24
 					let itemID = steroidID + 28
 					tableString += "<td><span class = " + "\"" + "consumableitem consumableitem" + consumableID + "\"" + " title = " + "\"" + localization['english'][steroidItems[steroidID]] + "\"" + "/>"
-					tableString += "<input type='text' class = 'itemInput' id='steroiditemVal" + steroidID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
+					tableString += "<input type='text' class = 'numberFont iconPosBR' id='steroiditemVal" + steroidID + "' size='3' onchange='fileObj.itemQuantities[" + (itemID) + "] = Number(this.value)' />"
 					tableString += "</td>"
 					//example completed line: <td><span class="craftitem craftitem0" title="Snowball"></span></td>
 				}
@@ -302,10 +317,10 @@
 			let dropdownElement = document.getElementById("dropdownTable");
 			dropdownContainer.classList.remove("hide");
 			
-			dropdownElement.innerHTML = generateEquipTableHTML(equipType, "position:relative; top: 20px; z-index: 100", "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'");
+			dropdownElement.innerHTML = generateEquipTableHTML(equipType, "dropdownTable", "'" + "setEquipDropdown(this.className.split(&quot; &quot;)[1])" + "'");
 		}
 		
-		function generateEquipTableHTML(equipType, tableStyleString, onclickString) {
+		function generateEquipTableHTML(equipType, tableClassString, onclickString) {
 			let equipAmount = 21;
 			let equipsPerRow = 7;
 			if(equipType === "flair") {
@@ -314,7 +329,7 @@
 			}
 			let equipRows = equipAmount / equipsPerRow;
 			
-			let entireTableString = "<table style='" + tableStyleString + "'>";
+			let entireTableString = "<table class='" + tableClassString + "'>";
 			for(let x = 0; x < equipRows; x++) {
 				entireTableString += "<tr>";
 				for(let y = 0; y < equipsPerRow; y++) {
@@ -333,7 +348,7 @@
 		}
 		
 		var changeDropdownWarning = true;
-		function changeDropdownTab(event, val) { //takes in an additinoal event variable to prevent the dropdown from closing
+		function changeDropdownTab(event, val) { //takes in an additional event variable to prevent the dropdown from closing
 			event.stopPropagation();
 			openEquipDropdown(dropdownOpener, null, val);
 			if(changeDropdownWarning === true) {
@@ -348,12 +363,71 @@
 			fileObj.playerData[dropdownPlayer][3][dropdownEquipSlot] = allEquips.indexOf(val);
 		}
 		
+		var overlevelEquipWarning = true;
+		function setEquipLevel(equipIndex, level) {
+			let equipLevelMax = 5;
+			if(equipIndex <= 36 || equipIndex >= 227) { //equip is flair
+				equipLevelMax = 3;
+			}
+			
+			if(overlevelEquipWarning === true) {
+				if(level > equipLevelMax) {
+					window.alert("WARNING! While setting an equipment to a higher-than-intended level can have benefits (such as a higher chance of equip effects activating), doing so will have strange effects on both the in-game equip menu and on the equipped character's stats and resistances. Proceed with caution!");
+					overlevelEquipWarning = false;
+				}
+			}
+			fileObj.equipLevels[equipIndex] = level;
+		}
+		
 		function closeEquipDropdown() {
 			document.getElementById("dropdownBackground").classList.add('hide');
 			document.getElementById("dropdownTable").innerHTML = "";
 			var dropdowns = document.getElementsByClassName("equipDropdown");
 			for (let element of dropdowns) {
 				element.classList.add('hide');
+			}
+		}
+		
+		//this one is for the obtained/levels part, not the equip selection dropdown
+		function changeEquipTab(equipType) {			
+			//list of equipment tabs
+			const equipTabs = new Array("sword", "staff", "gun", "bow", "toy", "hatm", "armorm", "hatf", "armorf", "flair");
+			
+			//darken all tabs
+			let allTabs = document.getElementsByClassName("equipTab");
+			for(const tab of allTabs) {
+				tab.classList.add("darkened");
+			}
+			//un-darken selected tab
+			let selectedTabIndex = equipTabs.indexOf(equipType);
+			allTabs[selectedTabIndex].classList.remove("darkened");
+			
+			let equipTabTable = document.getElementById("equipTabTable");
+			equipTabTable.innerHTML = generateEquipTableHTML(equipType, "", "'" + "toggleEquipOwned(this)" + "'");
+			
+			equipInnerTable = equipTabTable.children[0]
+			for (let row of equipInnerTable.rows) 
+			{
+				for (let cell of row.cells) {
+					let cellEq = cell.children[0]
+					let equipName = cellEq.classList[1]
+					if(fileObj.equipOwnage[allEquips.indexOf(equipName)] === false) {
+						cellEq.classList.add("darkened")
+					}	
+					cellEq.innerHTML = "<span style='padding: 1px' class='numberFont iconPosBL'>Lvl</span><input style='z-index:10' class='numberFont iconPosBR' type='text' id='tempEquipID_" + equipName + "' size='2' onchange='setEquipLevel(" + allEquips.indexOf(equipName) + ", Number(this.value))' onclick='event.stopPropagation()' value='" + fileObj.equipLevels[allEquips.indexOf(equipName)] + "' />"
+				}
+			}
+		}
+		
+		function toggleEquipOwned(self) {
+			let equipActive = !fileObj.equipOwnage[allEquips.indexOf(self.classList[1])]
+			fileObj.equipOwnage[allEquips.indexOf(self.classList[1])] = equipActive
+			
+			if(equipActive) {
+				self.classList.remove("darkened");
+			}
+			else {
+				self.classList.add("darkened");
 			}
 		}
 	
@@ -365,7 +439,7 @@
 			fileReader.onload = function() {
 				inputFileName = file.name
 				fileString = atob(fileReader.result)
-				loadFile(false);
+				loadFile();
 			}; 
 			fileReader.onerror = function() {
 				alert(fileReader.error);
@@ -375,12 +449,11 @@
 		function loadDefaultFile() {
 			inputFileName = "default.meow"
 			fileString = atob(defaultFileString)
-			loadFile(false);
+			loadFile();
 		}
 
-		function loadFile(prevLoaded) {
+		function loadFile() {
 			document.getElementById("everything").style = "display:block"
-			document.getElementById("result").innerText = ""
 			fileObj = JSON.parse(fileString)
 			
 			document.getElementById("currentSP").value = fileObj.misc[0]
@@ -455,9 +528,9 @@
 				//key items			
 			}
 			
-			if(fileObj["altEquipLocations"] === true) {
-				calculateRandEquips(prevLoaded)
-			}
+			changeEquipTab('sword')
+			
+			calculateRandEquips()
 		}
 		
 		function saveFile() {
@@ -575,6 +648,14 @@
 				return equipID
 			}
 			
+			acquireRemaining() {
+				let equipArr = new Array()
+				while(this.equipsAvailable() === true) {
+					equipArr.push(this.acquireEquip())
+				}
+				return equipArr
+			}
+			
 			swapEquips(prevEquip) {
 				let prevID = this.equipIDs.indexOf(prevEquip)
 				let newEquip = this.acquireEquip()
@@ -589,15 +670,18 @@
 		};
 
 		function printEquips(equipArray, resultElement) {
+			let completeStr = "<table><tr>"
 			for(let x = 0; x < equipArray.length; x++) {
-				resultElement.innerText += localization["english"][equipArray[x]];
-				if(x != equipArray.length - 1) {
-					resultElement.innerText += ",\xa0"
-				}
+				//Since we're using single-quotes to wrap the string, we need to replace apostrophes in equipment names with &apos;
+				let hoverString = localization["english"][equipArray[x]].replace("'", "&apos;");
+				let spanStr = "<td><span class='medium equip " + equipArray[x] + "' title='" + hoverString + "'></span></td>"
+				completeStr += spanStr
 			}
+			completeStr += "</tr></table>"
+			resultElement.innerHTML = completeStr;
 		}
 
-		function calculateRandEquips(prevLoaded) {
+		function calculateRandEquips() {
 			let swords = new EquipSet(21, 'sword');
 			let staffs = new EquipSet(21, 'staff');
 			let guns = new EquipSet(21, 'gun');
@@ -610,8 +694,6 @@
 			let flairs = new EquipSet(55, 'flair');
 			
 			let seed = fileObj.seed
-			
-			let resultElement = document.getElementById("result");
 
 			hatsM.markEquipped("hatm0");
 			hatsM.markEquipped("hatm1");
@@ -627,11 +709,12 @@
 			armorF.markEquipped("armorf0");
 			armorF.markEquipped("armorf1");
 			
+			//ideally this would also take into account the equipOwnage array, but that needs to be figured out first before this can continue
+			
 			let shopItems = new Array();
 			shopItems.push(hatsM.acquireEquip(), hatsF.acquireEquip(), armorM.acquireEquip(), armorF.acquireEquip(), flairs.acquireEquip(), swords.acquireEquip(), staffs.acquireEquip(), guns.acquireEquip(), bows.acquireEquip(), toys.acquireEquip(), hatsM.acquireEquip(), hatsF.acquireEquip(), hatsM.acquireEquip(), hatsF.acquireEquip(), flairs.acquireEquip(), swords.acquireEquip(), staffs.acquireEquip(), bows.acquireEquip(), toys.acquireEquip(), flairs.acquireEquip(), armorM.acquireEquip(), armorF.acquireEquip())
 			
-			resultElement.innerText += "\nShop items: "
-			printEquips(shopItems, resultElement)
+			//printEquips(shopItems, resultElement)
 			
 			let mattEquips = new Array(swords.acquireEquip(), hatsM.swapEquips("hatm0"), armorM.swapEquips("armorm15"));			
 			let natzEquips = new Array(staffs.acquireEquip(), hatsF.swapEquips("hatf0"), armorF.swapEquips("armorf0"));
@@ -639,8 +722,7 @@
 			let annaEquips = new Array(bows.acquireEquip(), hatsF.swapEquips("hatf1"), armorF.swapEquips("armorf1"));
 			let nolegsEquips = new Array(toys.acquireEquip(), hatsM.swapEquips("hatm1"), armorM.swapEquips("armorm1"));
 			
-			/*resultElement.innerText += "\nMatt equips: "
-			printEquips(mattEquips, resultElement);
+			/*printEquips(mattEquips, resultElement);
 			resultElement.innerText += "\nNatz equips: "
 			printEquips(natzEquips, resultElement);
 			resultElement.innerText += "\nLance equips: "
@@ -648,28 +730,29 @@
 			resultElement.innerText += "\nAnna equips: "
 			printEquips(annaEquips, resultElement);
 			resultElement.innerText += "\nNoLegs equips: "
-			printEquips(nolegsEquips, resultElement);
+			printEquips(nolegsEquips, resultElement);*/
 			
-			resultElement.innerText += "\nSword Order: "
-			printEquips(swordList, resultElement);
-			resultElement.innerText += "\n Staff Order: "
-			printEquips(staffList, resultElement);
-			resultElement.innerText += "\n Gun Order: "
-			printEquips(gunList, resultElement);
-			resultElement.innerText += "\n Bow Order: "
-			printEquips(bowList, resultElement);
-			resultElement.innerText += "\n Toy Order: "
-			printEquips(toyList, resultElement);
-			resultElement.innerText += "\n Male Hat Order: "
-			printEquips(hatsMList, resultElement);
-			resultElement.innerText += "\n Male Armor Order: "
-			printEquips(armorMList, resultElement);
-			resultElement.innerText += "\n Female Hat Order: "
-			printEquips(hatsFList, resultElement);
-			resultElement.innerText += "\n Female Armor Order: "
-			printEquips(armorFList, resultElement);
-			resultElement.innerText += "\n Flair Order: "
-			printEquips(flairList, resultElement);*/
+			let swordList = swords.acquireRemaining()
+			let staffList = staffs.acquireRemaining()
+			let gunList = guns.acquireRemaining()
+			let bowList = bows.acquireRemaining()
+			let toyList = toys.acquireRemaining()
+			let hatsMList = hatsM.acquireRemaining()
+			let armorMList = armorM.acquireRemaining()
+			let hatsFList = hatsF.acquireRemaining()
+			let armorFList = armorF.acquireRemaining()
+			let flairList = flairs.acquireRemaining()
+			
+			printEquips(swordList, document.getElementById("randE_swordList"));
+			printEquips(staffList, document.getElementById("randE_staffList"));
+			printEquips(gunList, document.getElementById("randE_gunList"));
+			printEquips(bowList, document.getElementById("randE_bowList"));
+			printEquips(toyList, document.getElementById("randE_toyList"));
+			printEquips(hatsMList, document.getElementById("randE_hatMList"));
+			printEquips(armorMList, document.getElementById("randE_armorMList"));
+			printEquips(hatsFList, document.getElementById("randE_hatFList"));
+			printEquips(armorFList, document.getElementById("randE_armorFList"));
+			printEquips(flairList, document.getElementById("randE_flairList"));
 		}
 	</script>
 </head>
@@ -741,7 +824,6 @@ It's all hidden by default, of course. -->
 		(icon) Weather Remix <input type="checkbox" id="weatherRemix" onchange="fileObj.altWeather = this.checked"  /><br>
 		(icon) Equip Remix <input type="checkbox" id="equipRemix" onchange="fileObj.altEquipStats = this.checked"  /><br>
 		(icon) Random Equips <input type="checkbox" id="randomEquips" onchange="fileObj.altEquipLocations = this.checked"  /><br>
-		(indent this please) Random Equip Seed: <input type="text" id="randomEquipsSeed" size="10" onchange="fileObj.seed = Number(this.value)"  /><br>
 		(icon) Scaling Foes <input type="checkbox" id="scalingFoes" onchange="fileObj.alwaysScaleFoes = this.checked"  /><br>
 		<br>
 		(icon) All-Player Battles <input type="radio" name="limitedPlayers" onchange="updateLimitedPlayerBattles()"  /> (default) <br>
@@ -755,17 +837,30 @@ It's all hidden by default, of course. -->
 		<br>
 		
 		<details>
-			<summary>Equip Remix Obtain Order</summary>
-			Equip Remix works as such:
+			<summary>Random Equips Obtain Order</summary>
+			Random Equips works as such:
 			The game uses a "seed" value in the save file and generates a new random order in which said equipment is obtained.
 			Whenever you would obtain an equipment of a specific type, you'll get the next equipment you don't have from the list.
-			(If you haven't "recruited" Lance yet, you may obtain some equips slightly out-of-order due to a programming quirk. To ensure a truly correct order, make sure you re-load the game after saving.)
+			(If you haven't "recruited" Lance yet, you may obtain some equips slightly out-of-order due to a programming quirk. To ensure a truly correct order, make sure you quit and load the game after saving.)
 			<br>
+			Random Equip Seed: <input type="text" id="randomEquipsSeed" size="10" onchange="fileObj.seed = Number(this.value)"  /><br>
 			<br>
 			In the next update probably, you'll be able to see the order in which you would gain all your equipment types.
 			But not now.
 			
-			<p id = "result">wow</p>
+			(This is a lie actually you can see them but they're extremely unorganized)
+			<div id="randE_shopItems"></div>
+			<div id="upcomingCharEquips"></div>
+			<div id="randE_swordList"></div>
+			<div id="randE_staffList"></div>
+			<div id="randE_gunList"></div>
+			<div id="randE_bowList"></div>
+			<div id="randE_toyList"></div>
+			<div id="randE_hatMList"></div>
+			<div id="randE_armorMList"></div>
+			<div id="randE_hatFList"></div>
+			<div id="randE_armorFList"></div>
+			<div id="randE_flairList"></div>
 		</details>
 	</details>
 	<br>
@@ -831,72 +926,72 @@ It's all hidden by default, of course. -->
 			The ID acronyms stand for "Attack/Defense", "Magic Attack/Magic Defense", "Evade/Accuracy", and "HP" -->
 			<td><table>
 				<td><span class="medium consumableitem consumableitem24">
-					<input type="text" id="mattADstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="mattADstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[0][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem25">
-					<input type="text" id="mattMMstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="mattMMstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[0][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem26">
-					<input type="text" id="mattEAstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+					<input type="text" id="mattEAstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[0][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem27">
-					<input type="text" id="mattHPstr" class="itemInput" size="1" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="mattHPstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[0][1][0]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 			</table></td>
 			<td><table>
 				<td><span class="medium consumableitem consumableitem28">
-					<input type="text" id="natzADstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="natzADstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[1][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem29">
-					<input type="text" id="natzMMstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="natzMMstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[1][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem30">
-					<input type="text" id="natzEAstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+					<input type="text" id="natzEAstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[1][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem31">
-					<input type="text" id="natzHPstr" class="itemInput" size="1" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="natzHPstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[1][1][0]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 			</table></td>
 			<td><table>
 				<td><span class="medium consumableitem consumableitem32">
-					<input type="text" id="lanceADstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="lanceADstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[2][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem33">
-					<input type="text" id="lanceMMstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="lanceMMstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[2][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem34">
-					<input type="text" id="lanceEAstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+					<input type="text" id="lanceEAstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[2][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem35">
-					<input type="text" id="lanceHPstr" class="itemInput" size="1" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="lanceHPstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[2][1][0]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 			</table></td>
 			<td><table>
 				<td><span class="medium consumableitem consumableitem36">
-					<input type="text" id="annaADstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="annaADstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[3][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem37">
-					<input type="text" id="annaMMstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="annaMMstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[3][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem38">
-					<input type="text" id="annaEAstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+					<input type="text" id="annaEAstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[3][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem39">
-					<input type="text" id="annaHPstr" class="itemInput" size="1" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="annaHPstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[3][1][0]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 			</table></td>
 			<td><table>
 				<td><span class="medium consumableitem consumableitem40">
-					<input type="text" id="nolegsADstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="nolegsADstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[4][1][1]=(this.value*2)+100; fileObj.playerData[0][1][4]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem41">
-					<input type="text" id="nolegsMMstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="nolegsMMstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[4][1][2]=(this.value*2)+100; fileObj.playerData[0][1][5]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem42">
-					<input type="text" id="nolegsEAstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
+					<input type="text" id="nolegsEAstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[4][1][3]=this.value+100; fileObj.playerData[0][1][6]=this.value+100; updatePlayerStats()"/>
 				</span></td>
 				<td><span class="medium consumableitem consumableitem43">
-					<input type="text" id="nolegsHPstr" class="itemInput" size="1" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/>
+					<input type="text" id="nolegsHPstr" class="numberFont iconPosBR" size="1" onchange="fileObj.playerData[4][1][0]=(this.value*2)+100; updatePlayerStats()"/>
 				</span></td>
 			</table></td>
 		  </tr>
@@ -916,7 +1011,21 @@ It's all hidden by default, of course. -->
 	<details open>
 		<summary>Obtained Equipment and Levels</summary>
 		<!-- <input value = "Obtain/Remove equipment" class="clickButton" onclick = "//window.alert('me when the')" type=button /> -->
-		<input value = "Work in progress!" class="clickButton" type=button />
+		<!-- Much like the dropdown, set of tabs that switch between available equipment -->
+		<table><tr>
+		<td><span class = "large equip equipTab sword0" onclick = "changeEquipTab('sword')"></span></td>
+		<td><span class = "large equip equipTab staff13" onclick = "changeEquipTab('staff')"></span></td>
+		<td><span class = "large equip equipTab gun7" onclick = "changeEquipTab('gun')"></span></td>
+		<td><span class = "large equip equipTab bow0" onclick = "changeEquipTab('bow')"></span></td>
+		<td><span class = "large equip equipTab toy17" onclick = "changeEquipTab('toy')"></span></td>
+		<td><span class = "large equip equipTab hatm0" onclick = "changeEquipTab('hatm')"></span></td>
+		<td><span class = "large equip equipTab armorm15" onclick = "changeEquipTab('armorm')"></span></td>
+		<td><span class = "large equip equipTab hatf0" onclick = "changeEquipTab('hatf')"></span></td>
+		<td><span class = "large equip equipTab armorf0" onclick = "changeEquipTab('armorf')"></span></td>
+		<td><span class = "large equip equipTab flair11" onclick = "changeEquipTab('flair')"></span></td>
+		</tr></table>
+		<!-- Equipment table is placed here! -->
+		<div id = "equipTabTable"> </div>
 	</details>
 	<br>
 	<details open>
@@ -965,7 +1074,7 @@ spellLevels - [T]
 spellOwnage - [T]
 area - [S]
 altWeather - [P], needs icon
-seed - [S]
+seed - [N], want to add functionality for showing changed equip order if seed is changed live (requires updating order logic to account for current item ownage)
 altEquipStats - [P], needs icon
 textFlags - [U]
 altEquipLocations - [P], needs icon
@@ -988,12 +1097,12 @@ equipSets - [T], just lists of equip ids for the equipment presets
 blocks - [?], no idea what this even does
 battlesWithResistance - [S]
 ownedSummons - [T], mainly just involves figuring out summon ids 
-equipLevels - [T]
+equipLevels - [D]
 mapData - [U], dear god those array sizes
 summonInfo - [T], summon name, nickname, unknown number variable (amount captured??)
 gameStats - [S], a bunch of unlabelled numbers but that's what ffdec is for
-party - [S]
-equipOwnage - [N]
+party - [N]
+equipOwnage - [D]
 shipping - [S], Was surprised at only 6 variables, but that's actually the total number of party pairings for the good ending
 recentSummons - [?]
 medals - [S], uses true/null instead of true/false for some reason
