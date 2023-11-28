@@ -31,6 +31,11 @@
 			font-family: Tahoma, sans-serif !important;
 		}
 		
+		.textVCenter {
+			position: relative;
+			bottom: 0.5em;
+		}
+		
 		.iconPosBR {
 			position: absolute; 
 			bottom: 0;
@@ -76,25 +81,28 @@
 		  color: white;
 		}
 		
+		.partyArrangeButton {
+		  background-color: #7F9CCB;
+		  padding: 5px 10px;
+		  border-radius: 5px;
+		  border: 1px ridge black;
+		  font-size: 0.8rem;
+		  height: auto;
+		}
+
+		.partyArrangeButton:hover {
+		  background-color: #2D5BA3;
+		  color: white;
+		}
+
+		.partyArrangeButton:active {
+		  background-color: #0D3F8F;
+		  color: white;
+		}
+		
 		.limitBar {
 			width: 55%;
 			accent-color: red;
-		}
-		
-		.small, .equip.small, .craftitem.small, .consumableitem.small {
-			--icon-size: 30px;
-		}
-		
-		.medium, .equip.medium, .craftitem.medium, .consumableitem.medium {
-			--icon-size: 40px;
-		}
-		
-		.large, .equip.large {
-			--icon-size: 80px;
-		}
-		
-		.absurdly_gigantic, .equip.absurdly_gigantic {
-			--icon-size: 160px;
 		}
 		
 		.dropdownTable {
@@ -136,6 +144,34 @@
 			position:relative;
 		}
 		
+		.playericon {
+			--icon-size: 60px;
+			background: url(players.png);
+			display: block;
+			width: var(--icon-size);
+			height: calc(var(--icon-size) * 1.0925);
+			/*player image resolution is not perfectly square so we gotta throw in the messed up multipliers*/
+			background-size: 500%;
+			/* 2000px image / 400px tiles = 5, so scale up by 5x */
+			position:relative;
+		}
+		
+		.small {
+			--icon-size: 30px;
+		}
+		
+		.medium {
+			--icon-size: 40px;
+		}
+		
+		.large {
+			--icon-size: 80px;
+		}
+		
+		.absurdly_gigantic {
+			--icon-size: 160px;
+		}
+		
 		.hide {
 			display: none;
 		}
@@ -151,6 +187,7 @@
 	<link rel="stylesheet" href="equip_styles.css"/>
 	<link rel="stylesheet" href="craftitem_styles.css"/>
 	<link rel="stylesheet" href="consumableitem_styles.css"/>
+	<link rel="stylesheet" href="playericon_styles.css"/>
 	
 	<script src = "localization.js"></script>
 	
@@ -364,6 +401,7 @@
 		}
 		
 		var overlevelEquipWarning = true;
+		var underlevelEquipWarning = true;
 		function setEquipLevel(equipIndex, level) {
 			let equipLevelMax = 5;
 			if(equipIndex <= 36 || equipIndex >= 227) { //equip is flair
@@ -374,6 +412,12 @@
 				if(level > equipLevelMax) {
 					window.alert("WARNING! While setting an equipment to a higher-than-intended level can have benefits (such as a higher chance of equip effects activating), doing so will have strange effects on both the in-game equip menu and on the equipped character's stats and resistances. Proceed with caution!");
 					overlevelEquipWarning = false;
+				}
+			}
+			if(underlevelEquipWarning === true) {
+				if(level < 0) {
+					window.alert("WARNING! There is no benefit to setting equip levels to a negative number. At best, the equip will have no effect, making it have dead weight. At worst, the equip will tank your stats to effectively nothing, making you die to a slight breeze. It also messes up the equip menu. Please reconsider.");
+					underlevelEquipWarning = false;
 				}
 			}
 			fileObj.equipLevels[equipIndex] = level;
@@ -429,6 +473,56 @@
 			else {
 				self.classList.add("darkened");
 			}
+		}
+		
+		function updatePlayerParty(active, playerID) {
+			if(active) {
+				if(!fileObj.party.includes(playerID)) {
+					fileObj.party.push(playerID);
+				}
+			}
+			else {
+				if(fileObj.party.includes(playerID)) {
+					fileObj.party.splice(fileObj.party.indexOf(playerID), 1);
+				}
+			}
+			rebuildPartyDisplay();
+		}
+		
+		function rebuildPartyDisplay() {
+			let partyOrder = document.getElementById("partyOrder")
+			partyOrder.innerHTML = "";
+			let playerIndex = 0;
+			for(let player of fileObj.party) {
+				let playerStr = "<td>"
+				playerStr += "<div class='playericon large player" + player + "'>"			
+				if(playerIndex !== 0) {
+					playerStr += "<input type='button' class='partyArrangeButton iconPosBL' value='<-' onclick='swapPartyIndex(" + playerIndex + ", " + (playerIndex - 1) + ")'></input>"
+				}
+				if(playerIndex < fileObj.party.length - 1) {
+					playerStr += "<input type='button' class='partyArrangeButton iconPosBR' value='->' onclick='swapPartyIndex(" + playerIndex + ", " + (playerIndex + 1) + ")'></input>"
+				}
+				playerStr += "</div>"
+				playerStr += "</td>"
+				playerIndex++;
+				partyOrder.innerHTML += playerStr
+			}
+			
+			if(fileObj.party.length == 0) {
+				document.getElementById('EmptyPartyNote').style = 'display:inline'
+				
+				partyOrder.innerHTML = "<div class='equip large equipEmpty'>"
+			}
+			else {
+				document.getElementById('EmptyPartyNote').style = 'display:none'		
+			}
+		}
+		
+		function swapPartyIndex(a, b) {
+			var temp = fileObj.party[a]
+			fileObj.party[a] = fileObj.party[b]
+			fileObj.party[b] = temp
+			rebuildPartyDisplay()
 		}
 	
 		//reads in the file and base64-decodes it into a usable string.
@@ -491,8 +585,10 @@
 				document.getElementById(name+"Flair2").title = localization["english"][allEquips[fileObj.playerData[x][3][4]]];
 				document.getElementById(name+"Flair3").className = "equip " + allEquips[fileObj.playerData[x][3][5]];
 				document.getElementById(name+"Flair3").title = localization["english"][allEquips[fileObj.playerData[x][3][5]]];
+				
+				document.getElementById(name+"InParty").checked = fileObj.party.includes(x + 1);
 			}
-			
+			rebuildPartyDisplay();
 			updatePlayerStats();
 			
 			//now set up the custom game flags since they're easy
@@ -879,15 +975,33 @@ It's all hidden by default, of course. -->
 	8 = If player is dead (true/false, unused in game)
 	-->
 	<details open>
-		<summary>Character Stats and Equips</summary>
+		<summary>Party Setup</summary>
+		<hr>
+		Party Order
 		<table>
-		  <tr>
-			<th>Matt</th>
-			<th>Natz</th>
-			<th>Lance</th>
-			<th>Anna</th>
-			<th>NoLegs</th>
-		  </tr>
+		<tr id="partyOrder">
+			<!-- Have some character portraits with left/right click buttons to shift them around -->
+		</tr>
+		<tr>
+			<td>Matt <input type="checkbox" id="mattInParty" onchange="updatePlayerParty(this.checked, 1)"/></td>
+			<td>Natalie <input type="checkbox" id="natzInParty" onchange="updatePlayerParty(this.checked, 2)"/></td>
+			<td>Lance <input type="checkbox" id="lanceInParty" onchange="updatePlayerParty(this.checked, 3)"/></td>
+			<td>Anna <input type="checkbox" id="annaInParty" onchange="updatePlayerParty(this.checked, 4)"/></td>
+			<td>Nolegs <input type="checkbox" id="nolegsInParty" onchange="updatePlayerParty(this.checked, 5)"/></td>
+		</tr>
+		</table>
+		<span id = "EmptyPartyNote" class="note" style = 'display:none'>!!! You can walk around the overworld with an empty party, but will instantly game over upon entering any battle.</span>
+		<br>
+		<hr>
+		Party Loadout
+		<table>
+		  <thead><tr>
+			<th><span style="display: inline-block" class="playericon small player1"></span><span class="textVCenter">Matt</span></th>
+			<th><span style="display: inline-block" class="playericon small player2"></span><span class="textVCenter">Natz</span></th>
+			<th><span style="display: inline-block" class="playericon small player3"></span><span class="textVCenter">Lance</span></th>
+			<th><span style="display: inline-block" class="playericon small player4"></span><span class="textVCenter">Anna</span></th>
+			<th><span style="display: inline-block" class="playericon small player5"></span><span class="textVCenter">NoLegs</span></th>
+		  </tr></thead>
 		  <tr>
 			<!-- Levels -->
 			<td>Level: <input type="text" id="mattLVL" size="2" onchange="fileObj.playerData[0][0] = this.value; updatePlayerStats()"/> </td>
@@ -1101,7 +1215,7 @@ equipLevels - [D]
 mapData - [U], dear god those array sizes
 summonInfo - [T], summon name, nickname, unknown number variable (amount captured??)
 gameStats - [S], a bunch of unlabelled numbers but that's what ffdec is for
-party - [N]
+party - [D], I guess there's techincally support for duplicate party members missing? But there's literally no point or benefit to doing so, so I don't really think it's necessary
 equipOwnage - [D]
 shipping - [S], Was surprised at only 6 variables, but that's actually the total number of party pairings for the good ending
 recentSummons - [?]

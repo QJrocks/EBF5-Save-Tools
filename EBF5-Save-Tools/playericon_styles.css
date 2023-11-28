@@ -1,0 +1,15 @@
+.player1 {
+background-position: calc(var(--icon-size) * -0) 0;
+}
+.player2 {
+background-position: calc(var(--icon-size) * -1) 0;
+}
+.player3 {
+background-position: calc(var(--icon-size) * -2) 0;
+}
+.player4 {
+background-position: calc(var(--icon-size) * -3) 0;
+}
+.player5 {
+background-position: calc(var(--icon-size) * -4) 0;
+}
