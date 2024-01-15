@@ -263,13 +263,13 @@ var allEquips = new Array(
 	"invalid"
 )
 
-var allSwords = allEquips.slice(0, 1);
-var allStaffs = allEquips.slice(0, 1);
-var allGuns = allEquips.slice(0, 1);
-var allBows = allEquips.slice(0, 1);
-var allToys = allEquips.slice(0, 1);
-var allArmorM = allEquips.slice(0, 1);
-var allArmorF = allEquips.slice(0, 1);
-var allHatsM = allEquips.slice(0, 1);
-var allHatsF = allEquips.slice(0, 1);
-var allFlairs = allEquips.slice(0, 1);
+var allSwords = allEquips.slice(184, 205);
+var allStaffs = allEquips.slice(163, 184);
+var allGuns = allEquips.slice(142, 163);
+var allBows = allEquips.slice(121, 142);
+var allToys = allEquips.slice(205, 226);
+var allArmorM = allEquips.slice(79, 100);
+var allArmorF = allEquips.slice(100, 121);
+var allHatsM = allEquips.slice(37, 58);
+var allHatsF = allEquips.slice(58, 79);
+var allFlairs = allEquips.slice(0, 37).concat(allEquips.slice(227, 245));

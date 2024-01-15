@@ -132,6 +132,7 @@ var allItems = new Array(
 	"candle",
 	"fishingrod",
 	"map",
+	//map2 is actually the Red Envelope, for some reason
 	"map2",
 	"woodenkey",
 	"coralkey",
